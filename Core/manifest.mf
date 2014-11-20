@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.desert.core
+OpenIDE-Module-Layer: org/desert/core/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/desert/core/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Install: org/desert/core/Installer.class

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <file name="OptionsExport_hidden"/>
+    <folder name="Windows2">
+        <folder name="Modes">
+            <folder name="output">
+                <file name="output.wstcref" url="outputWstcref.xml"/>
+            </folder>
+            <folder name="right">
+                <file name="BreakPointViewerTopComponent.wstcref" url="BreakPointViewerTopComponentWstcref.xml"/>
+            </folder>
+            <folder name="simstate">
+                <file name="SimStateTopComponent.wstcref" url="SimStateTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

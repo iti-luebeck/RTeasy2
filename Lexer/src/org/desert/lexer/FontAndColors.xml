@@ -1,0 +1,30 @@
+<!DOCTYPE fontscolors PUBLIC 
+    "-//NetBeans//DTD Editor Fonts and Colors settings 1.1//EN"  
+    "http://www.netbeans.org/dtds/EditorFontsColors-1_1.dtd">
+<fontscolors>
+    <fontcolor name="character" default="char" foreColor="black"/>
+    <fontcolor name="errors" default="error" foreColor="red"/>
+    <fontcolor name="identifier" default="identifier" foreColor="black">
+        <font style="bold"/>
+    </fontcolor>
+    <fontcolor name="conditional" default="conditional" foreColor="blue">
+    </fontcolor>
+    <fontcolor name="memory" default="memory" foreColor="red"/>
+    <fontcolor name="keyword" default="keyword" foreColor="blue">
+        <font style="bold"/>
+    </fontcolor>
+    <fontcolor name="marker" default="marker" foreColor="green">
+        <font style="bold"/>
+    </fontcolor>
+    <fontcolor name="literal" default="keyword" foreColor="red"/>
+    <fontcolor name="comment" default="comment" foreColor="gray"/>
+    <fontcolor name="number" default="number" foreColor="red"/>
+    <fontcolor name="operator" default="operator" foreColor="black"/>
+    <fontcolor name="string" default="string" foreColor="yellow"/>
+    <fontcolor name="separator" default="separator" foreColor="blue"/>
+    <fontcolor name="whitespace" default="whitespace"/>
+    <fontcolor name="method-declaration" default="method" foreColor="red">
+        <font style="bold" />
+    </fontcolor>
+    <fontcolor name="black" default="black" foreColor="black"/>
+</fontscolors>

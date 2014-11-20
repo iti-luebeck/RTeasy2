@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: de.uniluebeck.iti.rteasy
+OpenIDE-Module-Localizing-Bundle: de/uniluebeck/iti/rteasy/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

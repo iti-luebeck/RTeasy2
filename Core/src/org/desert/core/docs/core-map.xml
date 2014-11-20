@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 2.0//EN" "http://java.sun.com/products/javahelp/map_2_0.dtd">
+<map version="2.0">
+    <mapID target="org.desert.core.index" url="index.html"/>
+    <mapID target="org.desert.core.introduction" url="introduction.html"/>
+    <mapID target="org.desert.core.main" url="main-window.html"/>
+    <mapID target="org.desert.core.regarray-viewer" url="regarray-viewer.html"/>
+    <mapID target="org.desert.core.memory-viewer" url="memory-viewer.html"/>
+    <mapID target="org.desert.core.breakpoint-viewer" url="breakpoint-viewer.html"/>
+    <mapID target="org.desert.core.output" url="output.html"/>
+    <mapID target="org.desert.core.editor" url="editor.html"/>
+    <mapID target="org.desert.core.sim-state-viewer" url="sim-state-viewer.html"/>
+    <mapID target="org.desert.core.breakpoint" url="breakpoint.html"/>
+    <mapID target="org.desert.core.bases" url="bases.html"/>
+    <mapID target="org.desert.core.mode" url="mode.html"/>
+</map>

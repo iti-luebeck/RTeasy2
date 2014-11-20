@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <style type="text/css">
+            .bluetext {
+                color: #000000;
+                background-color: #00FFFF;
+            }
+
+            .yellowtext {
+                color: #000000;
+                background-color: #FFFF00;
+            }
+            .greentext {
+                color: #000000;
+                background-color: #00FF00;
+            }
+            .redtext {
+                color: #000000;
+                background-color: #FF0000;
+            }
+            .orangetext {
+                color: #000000;
+                background-color: #FFA500;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>9. Modes</h2>
+        <p>
+            DESERT has two different states. The 
+            edit mode offers functions to work on 
+            programs. The simulation mode is only 
+            available for completely compilable programs. For further 
+            processing you have to switch back to the edit mode.
+        </p>
+        <h3><a name="editmode"/>9.1 Edit Mode</h3>
+        <p>
+            The editor provides all common functions.
+        </p>
+        <p>
+            <b>Mark, Cut, Copy and Paste.&nbsp;</b>
+            These functions are available as usual. The following table shows the shortcuts.
+        </p>
+        <h2>Key Assignments</h2>
+        <table border=1>
+            <tr><th>Key(s)</th><th>Function</th></tr>
+            <tr><td>Arrow Keys</td><td>cursor movement</td></tr>
+            <tr><td>Ctrl + Arrow Keys Left and Right</td><td>cursor movement by words</td>
+            <tr><td>Backspace</td><td>delete character before cursor</td></tr>
+            <tr><td>Del</td><td>delete character under cursor</td></tr>
+            <tr><td>Pos 1</td><td>move cursor to front of row</td></tr>
+            <tr><td>End</td><td>move cursor to end of row</td></tr>
+            <tr><td>Ctrl+Pos 1</td><td>jump to beginning of listing</td></tr>
+            <tr><td>Ctrl+End</td><td>jump to end of listing</td></tr>
+            <tr><td>PgUp/PgDn</td><td>scroll by screen pages</td></tr>
+            <tr><td>Tab</td><td>emit tabulator spacing</td></tr>
+            <tr><td>Shift + Movement Keys</td><td>mark mode</td></tr>
+            <tr><td>Ctrl+A</td><td>mark all</td></tr>
+            <tr><td>Ctrl+C</td><td>copy marked region</td></tr>
+            <tr><td>Ctrl+X</td><td>cut marked region</td></tr>
+            <tr><td>Ctrl+V</td><td>insert from clipboard</td></tr>
+        </table><p>
+        <p>
+        <p><img src="../images/mode24.png" alt=""/><b>Mode:</b> Switches to simulation mode.</p>
+        <h3><a name="simmode"/>9.2 Simulation Mode</h3>
+        <p>During a simulation the current executed statements are highlighted.</p>
+        <p class="title"><b>Tabelle 2. Color marks</b></p>
+        <table summary="Color marks" border="1">
+            <colgroup>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Color</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="bluetext">Block</span></td>
+                    <td>current executed cycle (Step)</td>
+                </tr>
+                <tr>
+                    <td><span class="yellowtext">Statement</span></td>
+                    <td>current executed statement (Microstep) </td>
+                </tr>
+                <tr>
+                    <td><span class="greentext">Comparison</span></td>
+                    <td> the comparison provides to be true (Microstep)</td>
+                </tr>
+                <tr>
+                    <td><span class="redtext">Comparison</span></td>
+                    <td> the comparison provides to be false (Microstep)</td>
+                </tr>
+                <tr>
+                    <td><span class="bluetext">Block</span></td>
+                    <td>the cycle where the simulation is interrupted (Run) </td>
+                </tr>
+                <tr>
+                    <td><span class="orangetext">Block</span></td>
+                    <td>current reached breakpoint</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><img src="../images/Run24.png" alt=""/><b>Run:</b> Executes the program until the end state or a breakpoint is reached.</p>
+        <p><img src="../images/Reset24.png" alt=""/><b>Reset:</b> Resets simulation to the start state.</p>
+        <p><img src="../images/Step24.png" alt=""/><b>Step:</b> Jumps to the next state.</p>
+        <p><img src="../images/microStep24.png" alt=""/><b>MicroStep:</b> Jumps to the next statement.</p>
+        <p><img src="../images/mode24.png" alt=""/><b>Mode:</b> Switches back to edit mode.</p>
+    </body>
+</html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE type PUBLIC
+"-//NetBeans//DTD annotation type 1.1//EN"
+"http://www.netbeans.org/dtds/annotation-type-1_1.dtd">
+
+<type name="org-desert-breakpointannotation"
+      description_key="Breakpoint"
+      localizing_bundle="org-desert-core-annotations.Bundle"
+      visible="true" 
+      glyph="nbresloc:/org/desert/core/images/Breakpoint.png"
+      type="line"
+      browseable="false"
+      severity="error"
+/>

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: org.desert.lexer
+OpenIDE-Module-Layer: org/desert/lexer/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/desert/lexer/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

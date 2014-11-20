@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <body>
+        <h2>2. Main Window</h2>
+        <img src="images/main.png"/>
+        <p>
+            This is the main window. It contains the menus and the toolbar. 
+            All other windows are docked to the main window.
+        </p>
+        <ul style="list-style-type:disc">
+            <li><a href="editor.html">Editor Window</a></li>
+            <li><a href="output.html">Output Window</a></li>
+            <li><a href="sim-state-viewer.html">Simulation State Viewer</a></li>
+            <li><a href="memory-viewer.html">Memory Viewer</a></li>
+            <li><a href="regarray-viewer.html">Register Array Viewer</a></li>
+            <li><a href="breakpoint-viewer.html">Breakpoint Viewer</a></li>
+        </ul>
+        <h3><a name="menus"></a>2.1. Menus</h3>
+        <h4><a name="filemenu"></a>2.1.1. File Menu</h4>
+        <img src="images/filemenu.png" alt=""/>
+        <p><b>Open File:</b> Creates a new file on your file system.</p>
+        <p><b>New RTFile:</b> Loads an existing file from your file system.</p>
+        <p><b>Save:</b> Saves the current file at a predefined location.</p>
+        <p>
+            <b>Save as...:</b> Saves the file at the location that is chosen 
+            in the appearing dialog box.
+        </p>
+        <p><b>Exit:</b> Terminates DESERT.</p>
+        <h4><a name="editmenu"></a>2.1.2. Edit Menu</h4>
+        <img src="images/editmenu.png" alt=""/>
+        <p><b>Undo:</b> Cancel the last change.</p>
+        <p><b>Redo:</b> Repeats the last change.</p>
+        <p><b>Cut:</b> Deletes selected text in editor and save it to clipboard.</p>
+        <p><b>Copy:</b> Copies text to the clipboard.</p>
+        <p><b>Paste:</b> Pasts text from the clipboard.</p>
+        <p><b>Paste from History:</b> Paste text from the history.</p>
+        <p><b>Delete:</b> Deletes the selected text.</p>
+        <p><b>Select all:</b> Selects the entire source code.</p>
+        <p><b>Select Identifier:</b> Selects the word at the caret.</p>
+        <h4><a name="simmenu"></a>2.1.3. Simulate Menu</h4>
+        <img src="images/simulatemenu.png" alt=""/>
+        <p><b>Mode:</b> Switches between the two modes of DESERT.</p>
+        <p><b>Run:</b> Executes the program until you stop it or it reaches an end state.</p>
+        <p><b>Reset:</b> Sets the simulator to its initial values.</p>
+        <p><b>Step:</b> Executes the statements in the next cycle.</p>
+        <p><b>MicroStep:</b> Executes the next statement within a cycle.</p>
+        <h4><a name="helpmenu"></a>2.1.4. Help Menu</h4>
+        <img src="images/helpmenu.png" alt=""/>
+        <p><b>Help contens:</b> Shows the help of DESERT.</p>
+        <p><b>About:</b> Shows the program information.</p>
+        <h3><a name="toolbar"></a>2.2. Toolbar</h3>
+        <p>The toolbar provides you quick access to the important functions of the menus.</p>
+        <img src="images/toolbar.png" alt=""/>
+    </body>
+</html>

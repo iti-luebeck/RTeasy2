@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <style type="text/css">
+            .bluetext {
+                color: #000000;
+                background-color: #00FFFF;
+            }
+            .yellowtext {
+                color: #000000;
+                background-color: #FFFF00;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>5. Simulation State Viewer</h2>
+        <p>
+            The simulation window is only visible during a simulation. 
+            It displays the information of all declared registers, busses, 
+            memories and register arrays and the current state and cycle.
+        </p>
+        <p>
+            On top of the table it contains the current state and cycle.
+        </p>
+        <p>
+            The table displays the current entries of all declared components. 
+            A change of an entry is highlighted in 
+            <span class="yellowtext">yellow</span>. By double-clicking a 
+            table cell that displays an entry it becomes editable an a new 
+            entry can be entered. To apply the changes use the enter key. 
+            To discard them use the escape key.
+        </p>
+        <img src="images/simstatewindow.png" alt=""/>
+        <p>
+            Each declared memory displays a button that opens the window where 
+            the content of the corresponding memory is shown and editable.
+        </p>
+        <p>
+            Each declared register array has this button as well to manage 
+            its contents.
+        </p>
+    </body>
+</html>
