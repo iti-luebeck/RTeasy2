@@ -1,3 +1,11 @@
 build
+nbproject/private
+Core/nbproject/private/private.xml
+CodeCompletion/nbproject/private/private.xml
+GUI/nbproject/private/private.xml
+Helper/nbproject/private/private.xml
+Lexer/nbproject/private/private.xml
+Parser/nbproject/private/private.xml
+RTeasy/nbproject/private/private.xml
 *.log
 /dist/

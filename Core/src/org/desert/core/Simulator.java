@@ -274,8 +274,14 @@ public class Simulator {
 
     public static void run() {
         runner = new Runner();
+        runner.setRunPermission(true);
         runThread = new Thread(runner);
         EventQueue.invokeLater(runThread);
+        CentralLookup.getDefault().add(runner);
+    }
+
+    public static void stop() {
+        runner.setRunPermission(false);
     }
 
     private static void logTermination() {
@@ -464,7 +470,7 @@ public class Simulator {
 
     }
 
-    static class Runner implements Runnable {
+    public static class Runner implements Runnable {
 
         private boolean runPermission = false;
 
@@ -481,8 +487,15 @@ public class Simulator {
 
         @Override
         public void run() {
-            setRunPermission(true);
-            while (checkRunPermission() && step()) {
+            //setRunPermission(true);
+            //while (checkRunPermission() && step()) {
+            //}
+            if (checkRunPermission() && step()) {
+                EventQueue.invokeLater(this);
+            } else {
+                for (Runner r : CentralLookup.getDefault().lookupAll(Runner.class)) {
+                    CentralLookup.getDefault().remove(r);
+                }
             }
         }
     }
