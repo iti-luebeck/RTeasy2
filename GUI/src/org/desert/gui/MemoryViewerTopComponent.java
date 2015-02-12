@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,7 +77,6 @@ public final class MemoryViewerTopComponent extends TopComponent {
         this.m = m;
         associateLookup(Lookups.singleton(m));
         setName(NbBundle.getMessage(MemoryViewerTopComponent.class, "CTL_MemoryViewerTopComponent") + ": " + m.getIdStr());
-        //setDisplayName(NbBundle.getMessage(MemoryViewerTopComponent.class, "CTL_MemoryViewerTopComponent") + ": " + m.getIdStr());
 
         model = new MemoryFrameTableModel(m, this);
         table.setModel(model);
@@ -128,6 +129,9 @@ public final class MemoryViewerTopComponent extends TopComponent {
         table = new javax.swing.JTable();
         resetButton = new javax.swing.JButton();
         gotoButton = new javax.swing.JButton();
+        predecessorBtn = new javax.swing.JButton();
+        pageLbl = new javax.swing.JLabel();
+        successorBtn = new javax.swing.JButton();
 
         org.openide.awt.Mnemonics.setLocalizedText(baseLbl, org.openide.util.NbBundle.getMessage(MemoryViewerTopComponent.class, "LABEL_BASE")); // NOI18N
 
@@ -176,6 +180,22 @@ public final class MemoryViewerTopComponent extends TopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(predecessorBtn, org.openide.util.NbBundle.getMessage(MemoryViewerTopComponent.class, "BUTTON_PREDECESSOR")); // NOI18N
+        predecessorBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                predecessorBtnActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(pageLbl, org.openide.util.NbBundle.getMessage(MemoryViewerTopComponent.class, "LABEL_PAGE")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(successorBtn, org.openide.util.NbBundle.getMessage(MemoryViewerTopComponent.class, "BUTTON_SUCCESSOR")); // NOI18N
+        successorBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                successorBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,7 +215,13 @@ public final class MemoryViewerTopComponent extends TopComponent {
                         .addGap(18, 18, 18)
                         .addComponent(gotoButton)
                         .addGap(18, 18, 18)
-                        .addComponent(resetButton)))
+                        .addComponent(resetButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(predecessorBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pageLbl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(successorBtn)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -208,7 +234,12 @@ public final class MemoryViewerTopComponent extends TopComponent {
                     .addComponent(gotoButton)
                     .addComponent(resetButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(predecessorBtn)
+                    .addComponent(pageLbl)
+                    .addComponent(successorBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveButton)
@@ -354,17 +385,20 @@ public final class MemoryViewerTopComponent extends TopComponent {
         String bk = JOptionPane.showInputDialog(
                 this, NbBundle.getMessage(MemoryViewerTopComponent.class, "DIALOG_GOTO_ADDRESS_INPUT"), NbBundle.getMessage(MemoryViewerTopComponent.class, "BUTTON_GOTO_ADDRESS"), JOptionPane.QUESTION_MESSAGE);
         try {
-            int row = Integer.parseInt(bk, 16);
-            if (row < 0 || row >= model.getMemSize()) {
+            BigInteger inputBI = new BigInteger(bk, 16);
+            if (inputBI.compareTo(BigInteger.ZERO) < 0 || !model.addressValid(inputBI)) {
                 JOptionPane.showMessageDialog(this,
                         NbBundle.getMessage(MemoryViewerTopComponent.class, "DIALOG_GOTO_ADDRESS_OUT_OF_RANGE").replaceAll(
-                                "%%RANGE", "0 .. " + Integer.toString(model.getMemSize() - 1, 16).toUpperCase()),
+                                "%%RANGE", "0 .. " + model.getMemSize().toString(16).toUpperCase()),
                         NbBundle.getMessage(MemoryViewerTopComponent.class, "TITLE_ERROR"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            BigInteger pageBI = new BigDecimal(inputBI).divide(new BigDecimal("" + model.getPageSize())).toBigInteger();
+            model.setPage(pageBI.add(BigInteger.ONE));
             int pixels = 0;
-            if (row > 0) {
-                pixels += table.getRowHeight() * (row - 1);
+            if (inputBI.compareTo(BigInteger.ZERO) >= 0) {
+                int rows = inputBI.subtract(pageBI.multiply(new BigInteger(""+model.getPageSize()))).intValue();
+                pixels = table.getRowHeight() * (rows - 1);
             }
             scrollPane.getVerticalScrollBar().setValue(pixels);
         } catch (NumberFormatException e) {
@@ -374,14 +408,25 @@ public final class MemoryViewerTopComponent extends TopComponent {
         }
     }//GEN-LAST:event_gotoButtonActionPerformed
 
+    private void predecessorBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_predecessorBtnActionPerformed
+        model.changePage(false);
+    }//GEN-LAST:event_predecessorBtnActionPerformed
+
+    private void successorBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_successorBtnActionPerformed
+        model.changePage(true);
+    }//GEN-LAST:event_successorBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox baseBox;
     private javax.swing.JLabel baseLbl;
     private javax.swing.JButton gotoButton;
     private javax.swing.JButton loadButton;
+    private javax.swing.JLabel pageLbl;
+    private javax.swing.JButton predecessorBtn;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton saveButton;
     private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JButton successorBtn;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
     @Override
@@ -402,13 +447,24 @@ public final class MemoryViewerTopComponent extends TopComponent {
         String version = p.getProperty("version");
     }
 
-    public int getPointer() {
+    public String getPointer() {
         Register r = m.getAddr();
-        String s = RTSimGlobals.boolArray2String(r.getBoolArrayOld(),
+        return RTSimGlobals.boolArray2String(r.getBoolArrayOld(),
                 RTSimGlobals.BASE_DEC);
-        return Integer.parseInt(s);
     }
 
+    public void enablePredecessorBtn(boolean b) {
+        predecessorBtn.setEnabled(b);
+    }
+    
+    public void enableSuccessorBtn(boolean b) {
+        successorBtn.setEnabled(b);
+    }
+    
+    public void setPageLabel(String s) {
+        pageLbl.setText(s);
+    }
+    
     class PointerCellRenderer extends DefaultTableCellRenderer {
 
         public PointerCellRenderer() {
@@ -430,7 +486,11 @@ public final class MemoryViewerTopComponent extends TopComponent {
             } else {
                 setHorizontalAlignment(JTextField.RIGHT);
             }
-            if (row == getPointer()) {
+            int pageSize = ((MemoryFrameTableModel)table.getModel()).getPageSize();
+            BigInteger curPage = ((MemoryFrameTableModel)table.getModel()).getCurPage().subtract(BigInteger.ONE);
+            BigInteger curRow = curPage.multiply(new BigInteger(""+pageSize)).add(new BigInteger(""+row));
+            BigInteger curAddr = new BigInteger(getPointer());
+            if (curRow.compareTo(curAddr) == 0) {
                 setBackground(Color.GREEN);
                 setForeground(Color.BLACK);
             } else {

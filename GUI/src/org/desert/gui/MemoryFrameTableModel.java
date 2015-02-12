@@ -33,14 +33,21 @@ import de.uniluebeck.iti.rteasy.kernel.Memory;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.JOptionPane;
 import java.awt.Component;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import org.openide.util.NbBundle;
 
 public class MemoryFrameTableModel extends AbstractTableModel {
 
     private final Memory m;
-    public int base = RTSimGlobals.BASE_HEX, memdw, memaw, memsize;
+    public int base = RTSimGlobals.BASE_HEX, memdw, memaw;
     private final boolean taddr[];
     private final Component parent;
+    private final int pageSize = 1000000;
+    private final BigInteger pageSizeBI = new BigInteger("" + pageSize);
+    private BigInteger offset, curPage;
+    private final BigInteger memSize, lastPage;
 
     MemoryFrameTableModel(Memory tm, Component tp) {
         m = tm;
@@ -48,12 +55,24 @@ public class MemoryFrameTableModel extends AbstractTableModel {
         memaw = m.getAddrWidth();
         taddr = new boolean[memaw];
         memdw = m.getDataWidth();
-        memsize = 1 << memaw;
+        memSize = new BigInteger("2").pow(memaw).subtract(BigInteger.ONE);
+        curPage = BigInteger.ONE;
+        offset = BigInteger.ZERO;
+        BigDecimal memSizeBD = new BigDecimal(memSize).divide(new BigDecimal("" + pageSize)).setScale(0, RoundingMode.UP);
+        lastPage = memSizeBD.toBigInteger();
+        setPageLabel();
     }
 
-    // TODO das gleiche wie getRowCount
-    public int getMemSize() {
-        return memsize;
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public BigInteger getMemSize() {
+        return memSize;
+    }
+
+    public BigInteger getOffset() {
+        return offset;
     }
 
     @Override
@@ -61,9 +80,14 @@ public class MemoryFrameTableModel extends AbstractTableModel {
         return col == 1;
     }
 
+    public BigInteger getCurPage() {
+        return curPage;
+    }
+
     @Override
     public int getRowCount() {
-        return memsize;
+        int rowsLastPage = memSize.subtract(curPage.subtract(BigInteger.ONE).multiply(new BigInteger(""+pageSize))).intValue();
+        return curPage!=lastPage?pageSize:rowsLastPage;
     }
 
     @Override
@@ -74,9 +98,17 @@ public class MemoryFrameTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int row, int col) {
         if (col == 0) {
-            return Integer.toString(row, 16).toUpperCase();
+            BigInteger bI = new BigInteger("" + row).add(offset);
+            return bI.toString(16).toUpperCase();
         } else if (col == 1) {
-            RTSimGlobals.intInBoolArray(taddr, row);
+            String addrStr = new BigInteger("" + row).add(offset).toString(2);
+            int i = 0;
+            for (; i < addrStr.length(); i++) {
+                taddr[i] = addrStr.charAt(addrStr.length() - i - 1)=='1'?true:false;
+            }
+            for(;i<taddr.length;i++) taddr[i]=false;
+            
+            //RTSimGlobals.intInBoolArray(taddr, row);
             return RTSimGlobals.boolArray2String(m.getDataAt(taddr), base);
         } else {
             return "";
@@ -85,8 +117,14 @@ public class MemoryFrameTableModel extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object value, int row, int col) {
-        if (col == 1 && row < memsize) {
-            RTSimGlobals.intInBoolArray(taddr, row);
+        BigInteger addrBI = offset.add(new BigInteger("" + row));
+        if (col == 1 && addressValid(addrBI)) {
+            String addrStr = addrBI.toString(2);
+            int i = 0;
+            for (; i < addrStr.length(); i++) {
+                taddr[i] = addrStr.charAt(addrStr.length() - i - 1)=='1';
+            }
+            for(;i<taddr.length;i++) taddr[i]=false;
             try {
                 m.setDataAt(taddr, RTSimGlobals.string2boolArray(value.toString(),
                         memdw, base));
@@ -108,5 +146,41 @@ public class MemoryFrameTableModel extends AbstractTableModel {
                 return NbBundle.getMessage(MemoryFrameTableModel.class, "BUTTON_CONTENT");
         }
         return "";
+    }
+
+    private void setPageLabel() {
+        ((MemoryViewerTopComponent) parent).setPageLabel("" + curPage + "/" + lastPage);
+    }
+
+    private void updateOffset() {
+        offset = curPage.subtract(BigInteger.ONE).multiply(pageSizeBI);
+    }
+
+    public boolean addressValid(BigInteger addr) {
+        return (addr.compareTo(new BigInteger("0")) >= 0 && addr.compareTo(memSize) <= 0);
+    }
+
+    /**
+     *
+     * @param next true if next false if previous page
+     */
+    public void changePage(boolean next) {
+        curPage = next ? curPage.add(BigInteger.ONE) : curPage.subtract(BigInteger.ONE);
+        setPageLabel();
+        updateOffset();
+        ((MemoryViewerTopComponent) parent).enablePredecessorBtn((curPage.compareTo(BigInteger.ONE)>0));
+        ((MemoryViewerTopComponent) parent).enableSuccessorBtn((lastPage.compareTo(new BigInteger(""+curPage))>0));
+        fireTableDataChanged();
+    }
+
+    public void setPage(BigInteger page) {
+        if (page.compareTo(BigInteger.ONE) >= 0 && page.compareTo(lastPage) <= 0) {
+            curPage = page;
+            setPageLabel();
+            updateOffset();
+            ((MemoryViewerTopComponent) parent).enablePredecessorBtn((curPage.compareTo(BigInteger.ONE)>0));
+            ((MemoryViewerTopComponent) parent).enableSuccessorBtn((lastPage.compareTo(new BigInteger(""+curPage))>0));
+            fireTableDataChanged();
+        }
     }
 }
