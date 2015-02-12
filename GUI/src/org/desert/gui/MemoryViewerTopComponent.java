@@ -26,16 +26,15 @@ import java.util.Date;
 import java.util.ListIterator;
 import java.util.Locale;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
+import org.desert.helper.FileOperationsHelper;
 import org.desert.helper.WrapperIOLog;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.Lookups;
 import org.openide.windows.TopComponent;
-
 
 /**
  * Top component which displays something.
@@ -51,7 +50,6 @@ public final class MemoryViewerTopComponent extends TopComponent {
 
     private Memory m;
     private MemoryFrameTableModel model;
-    private File workDir = null;
     private String lf;
 
     public Memory getMemory() {
@@ -63,16 +61,14 @@ public final class MemoryViewerTopComponent extends TopComponent {
         return TopComponent.PERSISTENCE_NEVER;
     }
 
-    
     public MemoryViewerTopComponent() {
         //generated source
         initComponents();
         setToolTipText(NbBundle.getMessage(MemoryViewerTopComponent.class, "HINT_MemoryViewerTopComponent"));
         putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
-        putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);      
+        putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
     }
 
-    
     public void initMemoryViewer(Memory m) {
         this.m = m;
         associateLookup(Lookups.singleton(m));
@@ -102,6 +98,7 @@ public final class MemoryViewerTopComponent extends TopComponent {
         baseBox.setSelectedItem(hexBase);
         setLineFeed();
     }
+
     /**
      * This method determine the system linefeed and saves it to lf.
      */
@@ -253,19 +250,6 @@ public final class MemoryViewerTopComponent extends TopComponent {
         model.fireTableDataChanged();
     }//GEN-LAST:event_baseBoxActionPerformed
 
-    private JFileChooser getFileChooser() {
-        JFileChooser chooser;
-        try {
-            if (workDir == null) {
-                workDir = new File(System.getProperty("user.dir"));
-            }
-            chooser = new JFileChooser(workDir);
-        } catch (Throwable t) {
-            chooser = new JFileChooser();
-        }
-        return chooser;
-    }
-
     public void simUpdate() {
         model.fireTableDataChanged();
     }
@@ -292,13 +276,12 @@ public final class MemoryViewerTopComponent extends TopComponent {
     }
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        JFileChooser chooser = getFileChooser();
-        int result = chooser.showOpenDialog(this);
-        if (result == JFileChooser.CANCEL_OPTION) {
+        File file = FileOperationsHelper.openFileDialog();
+
+        if (file == null) {
             return;
         }
-        File file = chooser.getSelectedFile();
-        workDir = file.getParentFile();
+
         MemoryEntry mE = parseMemoryFile(file);
         if (mE != null) {
             updateMemory(mE);
@@ -324,17 +307,16 @@ public final class MemoryViewerTopComponent extends TopComponent {
     }
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        JFileChooser chooser = getFileChooser();
-        int result = chooser.showSaveDialog(this);
-        if (result == JFileChooser.CANCEL_OPTION) {
-            return;
-        }
         try {
-            File file = chooser.getSelectedFile();
-            workDir = file.getParentFile();
-            FileWriter fw;
-            fw = new FileWriter(file);
+            File f = FileOperationsHelper.openFileDialog();
             
+            if(f == null) {
+                return;
+            }
+            
+            FileWriter fw;
+            fw = new FileWriter(f);
+
             DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault());
             fw.write("# " + NbBundle.getMessage(MemoryViewerTopComponent.class, "TEXT_GENERATED_BY_DESERT") + " " + df.format(new Date()) + lf);
             fw.write("# " + NbBundle.getMessage(MemoryViewerTopComponent.class, "TEXT_MEMORY_CONFIG").replaceAll("%%MEMORY", m.getPrettyDecl()) + lf);
@@ -397,7 +379,7 @@ public final class MemoryViewerTopComponent extends TopComponent {
             model.setPage(pageBI.add(BigInteger.ONE));
             int pixels = 0;
             if (inputBI.compareTo(BigInteger.ZERO) >= 0) {
-                int rows = inputBI.subtract(pageBI.multiply(new BigInteger(""+model.getPageSize()))).intValue();
+                int rows = inputBI.subtract(pageBI.multiply(new BigInteger("" + model.getPageSize()))).intValue();
                 pixels = table.getRowHeight() * (rows - 1);
             }
             scrollPane.getVerticalScrollBar().setValue(pixels);
@@ -456,15 +438,15 @@ public final class MemoryViewerTopComponent extends TopComponent {
     public void enablePredecessorBtn(boolean b) {
         predecessorBtn.setEnabled(b);
     }
-    
+
     public void enableSuccessorBtn(boolean b) {
         successorBtn.setEnabled(b);
     }
-    
+
     public void setPageLabel(String s) {
         pageLbl.setText(s);
     }
-    
+
     class PointerCellRenderer extends DefaultTableCellRenderer {
 
         public PointerCellRenderer() {
@@ -486,9 +468,9 @@ public final class MemoryViewerTopComponent extends TopComponent {
             } else {
                 setHorizontalAlignment(JTextField.RIGHT);
             }
-            int pageSize = ((MemoryFrameTableModel)table.getModel()).getPageSize();
-            BigInteger curPage = ((MemoryFrameTableModel)table.getModel()).getCurPage().subtract(BigInteger.ONE);
-            BigInteger curRow = curPage.multiply(new BigInteger(""+pageSize)).add(new BigInteger(""+row));
+            int pageSize = ((MemoryFrameTableModel) table.getModel()).getPageSize();
+            BigInteger curPage = ((MemoryFrameTableModel) table.getModel()).getCurPage().subtract(BigInteger.ONE);
+            BigInteger curRow = curPage.multiply(new BigInteger("" + pageSize)).add(new BigInteger("" + row));
             BigInteger curAddr = new BigInteger(getPointer());
             if (curRow.compareTo(curAddr) == 0) {
                 setBackground(Color.GREEN);

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import org.desert.core.AllClosedCookie;
 import org.desert.core.RTFileFilter;
+import org.desert.helper.FileOperationsHelper;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -45,19 +46,8 @@ public final class NewRTFile implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ev) {
-        //The default dir to use if no value is stored
-        File home = new File(System.getProperty("user.home"));
-
-        //Now build a file chooser and invoke the dialog in one line of code
-        //"user-dir" is our unique key
-        FileChooserBuilder fCB = new FileChooserBuilder("user-dir");
-        fCB.setDefaultWorkingDirectory(home);
         RTFileFilter rtFF = new RTFileFilter();
-        fCB.setFileFilter(rtFF);
-        fCB.setAcceptAllFileFilterUsed(false);
-        File toAdd = fCB.showSaveDialog();
-
-        //Result will be null if the user clicked cancel or closed the dialog w/o OK
+        File toAdd = FileOperationsHelper.openFileDialog(rtFF);
         if (toAdd != null) {
             if (!rtFF.accept(toAdd)) {
                 toAdd = new File(toAdd.getAbsolutePath() + ".rt");
