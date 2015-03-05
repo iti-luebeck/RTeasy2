@@ -37,7 +37,7 @@ options {
 
 PARSER_BEGIN(RTSim_Parser)
 
-package org.rteasy.jcclexer;
+package org.desert.lexer.jcc;
 
 public class RTSim_Parser {}
 
@@ -45,7 +45,7 @@ PARSER_END(RTSim_Parser)
 
 SKIP :
 {
-  " " | "\r" | "\t" | "\n"  
+  " " | "\r" | "\t" | "\n"
 }
 //< "#" (~ ["\n"])* "\n" >
 
@@ -117,6 +117,17 @@ TOKEN :
 |
   < #LETTER:
       [  // all chars for which Character.isIdentifierStart is true
+	    "\u0027",
+		"\u002a",
+		"\u0040",
+		"\u0060",
+		"\u00b0",
+		"\u00b2",
+		"\u00b3",
+		"\u00b4",
+		"\\",
+		"\u005e",
+		"\u007e",
         "!",
         "\"",
         "\u00a7",
