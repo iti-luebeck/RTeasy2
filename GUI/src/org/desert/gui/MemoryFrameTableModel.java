@@ -61,6 +61,12 @@ public class MemoryFrameTableModel extends AbstractTableModel {
         BigDecimal memSizeBD = new BigDecimal(memSize).divide(new BigDecimal("" + pageSize)).setScale(0, RoundingMode.UP);
         lastPage = memSizeBD.toBigInteger();
         setPageLabel();
+        updateButtons();
+    }
+
+    private void updateButtons() {
+        ((MemoryViewerTopComponent) parent).enablePredecessorBtn((curPage.compareTo(BigInteger.ONE)>0));
+        ((MemoryViewerTopComponent) parent).enableSuccessorBtn((lastPage.compareTo(new BigInteger(""+curPage))>0));
     }
 
     public int getPageSize() {
@@ -168,8 +174,7 @@ public class MemoryFrameTableModel extends AbstractTableModel {
         curPage = next ? curPage.add(BigInteger.ONE) : curPage.subtract(BigInteger.ONE);
         setPageLabel();
         updateOffset();
-        ((MemoryViewerTopComponent) parent).enablePredecessorBtn((curPage.compareTo(BigInteger.ONE)>0));
-        ((MemoryViewerTopComponent) parent).enableSuccessorBtn((lastPage.compareTo(new BigInteger(""+curPage))>0));
+        updateButtons();
         fireTableDataChanged();
     }
 
@@ -178,8 +183,7 @@ public class MemoryFrameTableModel extends AbstractTableModel {
             curPage = page;
             setPageLabel();
             updateOffset();
-            ((MemoryViewerTopComponent) parent).enablePredecessorBtn((curPage.compareTo(BigInteger.ONE)>0));
-            ((MemoryViewerTopComponent) parent).enableSuccessorBtn((lastPage.compareTo(new BigInteger(""+curPage))>0));
+            updateButtons();
             fireTableDataChanged();
         }
     }
