@@ -30,11 +30,6 @@ public class RTParser extends Parser {
         Reader reader = new StringReader (snapshot.getText ().toString ());
         rtSIMParser = new RTSim_Parser (reader);
         rtSIMParser.parseRTProgram();
-        /*try {
-            rtSIMParser.rt_program();
-        } catch (org.rteasy.jccparser.ParseException ex) {
-            Logger.getLogger (RTSim_Parser.class.getName()).log (Level.WARNING, null, ex);
-        }*/
     }
 
     @Override
