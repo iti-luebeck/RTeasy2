@@ -29,7 +29,7 @@ public class RTSim_Parser/*@bgen(jjtree)*/implements RTSim_ParserTreeConstants, 
     catch (ParseException e) {
       hasSyntaxError = true;
       syntaxErrorMessage = e.getMessage();
-          recover(e, SEMICOLON);
+      recover(e, SEMICOLON);
     }
     return rn;
   }

@@ -504,7 +504,7 @@ static final long[] jjbitVec1 = {
    0xfff0000000200002L, 0xffffffffffffdfffL, 0xfffff00f7fffffffL, 0x12000000007fffffL
 };
 static final long[] jjbitVec3 = {
-   0x0L, 0x0L, 0x42004bc00000000L, 0xff7fffffff7fffffL
+   0x0L, 0x0L, 0x43d04bc00000000L, 0xff7fffffff7fffffL
 };
 static final long[] jjbitVec4 = {
    0xffffcffffffffL, 0xffffffffffff0000L, 0xf9ff3fffffffffffL, 0x401f00030003L
@@ -615,7 +615,7 @@ static final long[] jjbitVec39 = {
    0x87fffffe00000010L, 0xffffffe007fffffeL, 0x7fffffffffffffffL, 0x631cfcfcfcL
 };
 static final long[] jjbitVec40 = {
-   0x0L, 0x0L, 0x420043cffffffffL, 0xff7fffffff7fffffL
+   0x0L, 0x0L, 0x43d043cffffffffL, 0xff7fffffff7fffffL
 };
 static final long[] jjbitVec41 = {
    0xffffffffffffffffL, 0x400000700007fffL, 0xfffffffbffffd740L, 0xffffffcff7fffL
@@ -705,7 +705,7 @@ private int jjMoveNfa_0(int startState, int curPos)
                         kind = 8;
                      jjCheckNAdd(9);
                   }
-                  else if ((0x807600000000L & l) != 0L)
+                  else if ((0x84f600000000L & l) != 0L)
                   {
                      if (kind > 54)
                         kind = 54;
@@ -778,14 +778,14 @@ private int jjMoveNfa_0(int startState, int curPos)
                   jjstateSet[jjnewStateCnt++] = 11;
                   break;
                case 12:
-                  if ((0x807600000000L & l) == 0L)
+                  if ((0x84f600000000L & l) == 0L)
                      break;
                   if (kind > 54)
                      kind = 54;
                   jjCheckNAdd(13);
                   break;
                case 13:
-                  if ((0x3ff00100fffc1ffL & l) == 0L)
+                  if ((0x3ff04900fffc1ffL & l) == 0L)
                      break;
                   if (kind > 54)
                      kind = 54;
@@ -803,7 +803,7 @@ private int jjMoveNfa_0(int startState, int curPos)
             switch(jjstateSet[--i])
             {
                case 0:
-                  if ((0x7fffffe87fffffeL & l) != 0L)
+                  if ((0x47ffffffd7ffffffL & l) != 0L)
                   {
                      if (kind > 54)
                         kind = 54;
@@ -843,14 +843,14 @@ private int jjMoveNfa_0(int startState, int curPos)
                   jjCheckNAdd(11);
                   break;
                case 12:
-                  if ((0x7fffffe87fffffeL & l) == 0L)
+                  if ((0x47ffffffd7ffffffL & l) == 0L)
                      break;
                   if (kind > 54)
                      kind = 54;
                   jjCheckNAdd(13);
                   break;
                case 13:
-                  if ((0x87fffffe87fffffeL & l) == 0L)
+                  if ((0xc7ffffffd7ffffffL & l) == 0L)
                      break;
                   if (kind > 54)
                      kind = 54;
