@@ -5,3 +5,5 @@ nbproject/private
 /dist/
 branding/modules/org-netbeans-core-windows.jar/org/netbeans/core/windows/view/ui/Bundle.properties
 branding/core/core.jar/org/netbeans/core/startup/Bundle.properties
+/Core/nbproject/private/
+/GUI/nbproject/private/
