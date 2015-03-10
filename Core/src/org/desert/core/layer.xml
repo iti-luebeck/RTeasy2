@@ -117,6 +117,7 @@
         </folder>
         <folder name="Help">
             <attr name="position" intvalue="500"/>
+            <file name="org-netbeans-modules-autoupdate-ui-actions-CheckForUpdatesAction.shadow_hidden"/>
         </folder>
         <file name="Refactoring_hidden"/>
         <file name="RunProject_hidden"/>
@@ -139,7 +140,7 @@
         <folder name="AutoupdateType">
             <file name="org_desert_core_update_center.instance">
                 <attr name="displayName" bundlevalue="org.desert.core.Bundle#Services/AutoupdateType/org_desert_core_update_center.instance"/>
-                <attr name="enabled" boolvalue="true"/>
+                <attr name="enabled" boolvalue="false"/>
                 <attr name="instanceCreate" methodvalue="org.netbeans.modules.autoupdate.updateprovider.AutoupdateCatalogFactory.createUpdateProvider"/>
                 <attr name="instanceOf" stringvalue="org.netbeans.spi.autoupdate.UpdateProvider"/>
                 <attr name="url" bundlevalue="org.desert.core.Bundle#org_desert_core_update_center"/>
