@@ -278,6 +278,9 @@ public class Simulator {
         runThread = new Thread(runner);
         EventQueue.invokeLater(runThread);
         CentralLookup.getDefault().add(runner);
+        for (Simulator s : CentralLookup.getDefault().lookupAll(Simulator.class)) {
+            CentralLookup.getDefault().remove(s);
+        }
     }
 
     public static void stop() {
@@ -496,6 +499,7 @@ public class Simulator {
                 for (Runner r : CentralLookup.getDefault().lookupAll(Runner.class)) {
                     CentralLookup.getDefault().remove(r);
                 }
+                CentralLookup.getDefault().add(new Simulator());
             }
         }
     }
