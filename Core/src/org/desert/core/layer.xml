@@ -147,6 +147,26 @@
             </file>
         </folder>
     </folder>
+    <folder name="Shortcuts">
+        <file name="F4.shadow">
+            <attr name="originalFile" stringvalue="Actions/Desert/org-desert-core-actions-Mode.instance"/>
+	</file>
+        <file name="F5.shadow">
+            <attr name="originalFile" stringvalue="Actions/Desert/org-rteasy-actions-Run.instance"/>
+	</file>
+        <file name="F6.shadow">
+            <attr name="originalFile" stringvalue="Actions/Desert/org-desert-core-actions-Stop.instance"/>
+	</file>
+        <file name="F7.shadow">
+            <attr name="originalFile" stringvalue="Actions/Desert/org-rteasy-actions-Reset.instance"/>
+	</file>
+        <file name="F8.shadow">
+            <attr name="originalFile" stringvalue="Actions/Desert/org-rteasy-actions-Step.instance"/>
+	</file>
+        <file name="F9.shadow">
+            <attr name="originalFile" stringvalue="Actions/Desert/org-rteasy-actions-MicroStep.instance"/>
+	</file>
+    </folder>
     <folder name="Toolbars">
         <file name="Standard.xml" url="Standard.xml"/>
         <file name="Build_hidden"/>
