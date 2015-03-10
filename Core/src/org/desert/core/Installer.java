@@ -39,7 +39,6 @@ public class Installer extends ModuleInstall {
 
     @Override
     public void restored() {
-        System.setProperty("netbeans.buildnumber", "1.0");
         removeToolbarPopupMenu();
         setOpenFileActionCookies();
         RTSimGlobals.init();
