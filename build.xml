@@ -11,14 +11,12 @@
             <arg line="describe --tags --always"/>
         </exec>
 
-        <mkdir dir="${basedir}/branding/core/core.jar/org/netbeans/core/startup"/>
         <propertyfile
             file="${basedir}/branding/core/core.jar/org/netbeans/core/startup/Bundle.properties" 
             comment="Updated by build script">
             <entry key="currentVersion" value="${app.title} ${app.version} (Build: ${app.git.version})" />
         </propertyfile>
 
-        <mkdir dir="${basedir}/branding/modules/org-netbeans-core-windows.jar/org/netbeans/core/windows/view/ui"/>
         <propertyfile
             file="${basedir}/branding/modules/org-netbeans-core-windows.jar/org/netbeans/core/windows/view/ui/Bundle.properties"
             comment="Updated by build script">
