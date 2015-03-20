@@ -121,6 +121,7 @@ public class GlobalActionContextProxy implements ContextGlobalProvider {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(EditorRegistry.LAST_FOCUSED_REMOVED_PROPERTY)) {
+                Simulator.cancel();
                 clearOpenLookup();
             }
         }
