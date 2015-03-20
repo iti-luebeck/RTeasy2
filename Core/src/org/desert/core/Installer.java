@@ -107,4 +107,12 @@ public class Installer extends ModuleInstall {
         }
     }
 
+    @Override
+    public boolean closing() {
+        Simulator.stop();
+        return super.closing(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+
 }
