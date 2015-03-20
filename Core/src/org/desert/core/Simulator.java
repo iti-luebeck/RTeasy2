@@ -284,7 +284,9 @@ public class Simulator {
     }
 
     public static void stop() {
-        runner.setRunPermission(false);
+        if (runner != null) {
+            runner.setRunPermission(false);
+        }
     }
 
     private static void logTermination() {
