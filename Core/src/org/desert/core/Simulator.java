@@ -11,7 +11,6 @@ import de.uniluebeck.iti.rteasy.SignalsData;
 import de.uniluebeck.iti.rteasy.frontend.ASTRtProg;
 import de.uniluebeck.iti.rteasy.frontend.RTSim_Parser;
 import de.uniluebeck.iti.rteasy.gui.RTOptions;
-import de.uniluebeck.iti.rteasy.gui.VHDLFrame;
 import de.uniluebeck.iti.rteasy.kernel.Expression;
 import de.uniluebeck.iti.rteasy.kernel.RTProgram;
 import de.uniluebeck.iti.rteasy.kernel.RTSim_SemAna;
@@ -19,8 +18,6 @@ import de.uniluebeck.iti.rteasy.kernel.RegisterArray;
 import de.uniluebeck.iti.rteasy.kernel.Statement;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -40,8 +37,6 @@ import org.desert.gui.SimStateTopComponent;
 import org.desert.helper.CentralLookup;
 import org.desert.helper.WindowHelper;
 import org.desert.helper.WrapperIOLog;
-import org.netbeans.api.editor.EditorRegistry;
-import org.openide.cookies.OpenCookie;
 import org.openide.cookies.SaveCookie;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup.Result;
@@ -70,28 +65,14 @@ public class Simulator {
      * Editing: 1, Simulating: 2
      */
     private static Modes mode = Modes.edit;
-    private static final boolean listener = false;
 
     public static void changeMode() {
-        if (!listener) {
-            PropertyChangeListener l = new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals("lastFocusedRemoved")) {
-                        setEditMode();
-                    }
-                }
-            };
-
-            EditorRegistry.addPropertyChangeListener(l);
-        }
-
         switch (Simulator.mode) {
             case edit:
                 setSimulateMode();
                 break;
             case simulate:
-                setEditMode();
+                cancel();
                 break;
         }
     }
@@ -283,8 +264,28 @@ public class Simulator {
         }
     }
 
+    /**
+     * Called by the stop action. Stops the simulation and adds simulator
+     * instance to CentralLookup to enable simulation actions.
+     */
     public static void stop() {
-        runner.setRunPermission(false);
+        if (runner != null) {
+            runner.setRunPermission(false);
+            // enable simulation actions
+            CentralLookup.getDefault().add(new Simulator());
+        }
+    }
+
+    /**
+     * Called if tab or the application is closed and if mode changes during the
+     * simulation. If simulation runs it will be canceled and mode is set to
+     * edit mode.
+     */
+    public static void cancel() {
+        setEditMode();
+        if (runner != null) {
+            runner.setRunPermission(false);
+        }
     }
 
     private static void logTermination() {
@@ -490,16 +491,12 @@ public class Simulator {
 
         @Override
         public void run() {
-            //setRunPermission(true);
-            //while (checkRunPermission() && step()) {
-            //}
             if (checkRunPermission() && step()) {
                 EventQueue.invokeLater(this);
             } else {
                 for (Runner r : CentralLookup.getDefault().lookupAll(Runner.class)) {
                     CentralLookup.getDefault().remove(r);
                 }
-                CentralLookup.getDefault().add(new Simulator());
             }
         }
     }
