@@ -1,7 +1,8 @@
 Desert
 ===============
 
-Desert is a development environment for register transfer language which
+Desert ("Development Editor and Simulation Environment for Register Transfer")
+is a development environment for register transfer language which
 offers functions to design and simulate a register transfer program.
 
 Desert is the successor to [rteasy][rteasy].
