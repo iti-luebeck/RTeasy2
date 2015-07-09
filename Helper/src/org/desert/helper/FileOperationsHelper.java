@@ -22,6 +22,14 @@ public class FileOperationsHelper {
         fCB.setAcceptAllFileFilterUsed(false);
         return fCB.showOpenDialog();
     }
+ 
+    public static File saveFileDialog(FileFilter fF) {
+        File workDir = new File(System.getProperty("user.home"));
+        FileChooserBuilder fCB = new FileChooserBuilder("user-dir").setDefaultWorkingDirectory(workDir);
+        fCB.setFileFilter(fF);
+        fCB.setAcceptAllFileFilterUsed(false);
+        return fCB.showSaveDialog();
+    }
     
     public static File openFileDialog() {
         File workDir = new File(System.getProperty("user.home"));

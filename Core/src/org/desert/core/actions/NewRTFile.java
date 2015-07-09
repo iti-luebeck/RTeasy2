@@ -47,7 +47,7 @@ public final class NewRTFile implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         RTFileFilter rtFF = new RTFileFilter();
-        File toAdd = FileOperationsHelper.openFileDialog(rtFF);
+        File toAdd = FileOperationsHelper.saveFileDialog(rtFF);
         if (toAdd != null) {
             if (!rtFF.accept(toAdd)) {
                 toAdd = new File(toAdd.getAbsolutePath() + ".rt");
