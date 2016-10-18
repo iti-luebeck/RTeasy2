@@ -10,5 +10,5 @@ package org.desert.codecompletion;
  * @author Christian
  */
 public enum CompletionProposals {
-    DECLARE, REGISTER, ARRAY, BUS, MEMORY, READ, WRITE, SWITCH, CASE, DEFAULT, IF, THEN, ELSE, FI, GOTO, NOP    
+    DECLARE, REGISTER, ARRAY, BUS, MEMORY, STORAGE, READ, WRITE, SWITCH, CASE, DEFAULT, IF, THEN, ELSE, FI, GOTO, NOP    
 }
