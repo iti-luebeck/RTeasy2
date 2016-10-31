@@ -96,6 +96,7 @@ TOKEN :
 | < REGISTER: "register" >
 | < BUS: "bus" >
 | < MEMORY: "memory" >
+| < STORAGE: "storage" >
 | < ARRAY: "array" >
 | < READ: "read" >
 | < WRITE: "write" >

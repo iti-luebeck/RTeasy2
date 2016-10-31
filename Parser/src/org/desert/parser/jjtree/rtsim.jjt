@@ -145,6 +145,7 @@ TOKEN :
 | < DECLARE: "declare" >
 | < REGISTER: "register" >
 | < BUS: "bus" >
+| < STORAGE: "storage" >
 | < MEMORY: "memory" >
 | < ARRAY: "array" >
 | < READ: "read" >
@@ -874,6 +875,7 @@ void declaration() #Decl:
   | dir = bus_decl() {jjtThis.setDeclType(RTSimGlobals.BUS);
                       jjtThis.setSignalDirection(dir); }
   | memory_decl() {jjtThis.setDeclType(RTSimGlobals.MEMORY);}
+  | storage_decl() {jjtThis.setDeclType(RTSimGlobals.STORAGE);}
   )
 }
 
@@ -896,6 +898,12 @@ void memory_decl() #void :
 {}
 {
   <MEMORY> mem_decl_list()
+}
+
+void storage_decl() #void : 
+{}
+{
+  <MEMORY> storage_decl_list()
 }
 
 //void regarray_decl() #void :
