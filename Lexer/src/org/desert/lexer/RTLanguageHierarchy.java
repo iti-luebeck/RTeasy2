@@ -67,6 +67,7 @@ public class RTLanguageHierarchy extends LanguageHierarchy<RTTokenId> {
             new RTTokenId("REGISTER", "memory", REGISTER),
             new RTTokenId("BUS", "memory", BUS),
             new RTTokenId("MEMORY", "memory", MEMORY),
+            new RTTokenId("STORAGE","storage", STORAGE),
             new RTTokenId("ARRAY", "memory", ARRAY),
             new RTTokenId("READ", "black", READ),
             new RTTokenId("WRITE", "black", WRITE),
