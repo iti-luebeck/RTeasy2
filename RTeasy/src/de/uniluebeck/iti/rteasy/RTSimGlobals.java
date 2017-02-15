@@ -72,6 +72,7 @@ public class RTSimGlobals {
   public final static int MEMORY = 122;
   public final static int LABEL = 123;
   public final static int ARRAY = 124;
+  public final static int STORAGE = 125;
   public final static int BASE_BIN = 200;
   public final static int BASE_DEC = 201;
   public final static int BASE_HEX = 202;

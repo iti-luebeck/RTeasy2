@@ -846,17 +846,6 @@ ASTRtProg rt_program() #RtProg :
   { return jjtThis; }
 }
 
-/*
-void interfaceList() #InterfaceList :
-{}
-{
-  ("in" { jjtThis.setSignalDirection(RTSimGlobals.DIR_IN); }
-  |"out" { jjtThis.setSignalDirection(RTSimGlobals.DIR_OUT); })
-  reg_bus_decl_list() ";"
-  [interfaceList() {jjtThis.setHasNext(true);} ]
-}
-*/
-
 void declarations() #Decls :
 {}
 {
@@ -879,12 +868,6 @@ void declaration() #Decl:
   )
 }
 
-//void register_decl() #void :
-//{}
-//{
-//  <REGISTER> reg_bus_decl_list()
-//}
-
 int bus_decl() #void :
 { int back = RTSimGlobals.UNUSED; }
 {
@@ -903,14 +886,8 @@ void memory_decl() #void :
 void storage_decl() #void : 
 {}
 {
-  <MEMORY> storage_decl_list()
+  <STORAGE> storage_decl_list()
 }
-
-//void regarray_decl() #void :
-//{}
-//{
-//	<ARRAY> regarray_decl_list()
-//}
 
 void reg_bus_decl_list() #RegBusDeclList :
 {}
@@ -940,6 +917,22 @@ void mem_decl() #MemDecl:
   <COMMA>
   t = <ID> {jjtThis.setDataReg(t.image.toString());}
   <RPAREN>
+}
+
+void stor_decl_list() #StorDiclList : 
+{}
+{
+  stor_decl() [<COMMA> stor_decl_list() {jjtThis.setHasNext(true);}]
+}
+
+void stor_decl() #StorDecl :
+{ Token t; BitRange br;}
+{
+ t = <ID> {jjtThis.setName(t.image.toString());}
+  [br = bit_range() {jjtThis.setBitRange(br;)}]
+  <LBRACKET>
+  t = <DEC_NUM>  {jjtThis.setNumberOfRegisters(Integer.parseInt(t.image.toString()));}
+  <RBRACKET>
 }
 
 void regarray_decl_list() #RegArrayDeclList :
