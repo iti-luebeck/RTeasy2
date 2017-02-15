@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2017, University of Luebeck, Institute of Computer Engineering
+ * Copyright (c) 2003-2013, University of Luebeck, Institute of Computer Engineering
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -26,29 +26,26 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-package de.uniluebeck.iti.rteasy.frontend;
+
+package de.uniluebeck.iti.rteasy.kernel;
+
+import de.uniluebeck.iti.rteasy.frontend.ASTStorDecl;
 
 /**
- * 
- * @author Jasper Schwinghammer <jasper@schwinghammer.de>
+ *
+ * @author Jasper Schwinghammer
  */
-public class ASTStorDeclList extends RTSimNode {
-	private boolean hasNext = false;
-	
-	public ASTStorDeclList(int id) {
-            super(id);
-        }
+public class Storage extends SimulationObject{
+    
+    
+    public Storage(ASTStorDecl decl){
+        super(decl.getName(), decl.getPositionRange());
+        
+    }
 
-  public void setHasNext(boolean b) {
-	  hasNext = b;
-  }
-  public boolean hasNext() {
-	  return hasNext;
-  }
-  public ASTStorDeclList next() {
-	  if(hasNext) return (ASTStorDeclList) jjtGetChild(1);
-	    else return null;
-  }
-  public ASTStorDecl getStorDecl() { return (ASTStorDecl) jjtGetChild(0); }
+    @Override
+    public String getVHDLName() {
+        return "stor_"+getIdStr();
+    }
+    
 }
-
