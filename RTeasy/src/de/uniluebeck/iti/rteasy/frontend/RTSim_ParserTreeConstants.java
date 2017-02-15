@@ -11,18 +11,20 @@ public interface RTSim_ParserTreeConstants
   public int JJTREGBUSDECL = 5;
   public int JJTMEMDECLLIST = 6;
   public int JJTMEMDECL = 7;
-  public int JJTREGARRAYDECLLIST = 8;
-  public int JJTREGARRAYDECL = 9;
-  public int JJTSTAT_SEQ = 10;
-  public int JJTOUTER_PARSTATS = 11;
-  public int JJTIF_STAT = 12;
-  public int JJTSWITCH_CASE_STAT = 13;
-  public int JJTCASELIST = 14;
-  public int JJTINNER_PARSTATS = 15;
-  public int JJTEXPR = 16;
-  public int JJTNUM_CONST = 17;
-  public int JJTBIT_SEQ = 18;
-  public int JJTSTAT = 19;
+  public int JJTSTORDECLLIST = 8;
+  public int JJTSTORDECL = 9;
+  public int JJTREGARRAYDECLLIST = 10;
+  public int JJTREGARRAYDECL = 11;
+  public int JJTSTAT_SEQ = 12;
+  public int JJTOUTER_PARSTATS = 13;
+  public int JJTIF_STAT = 14;
+  public int JJTSWITCH_CASE_STAT = 15;
+  public int JJTCASELIST = 16;
+  public int JJTINNER_PARSTATS = 17;
+  public int JJTEXPR = 18;
+  public int JJTNUM_CONST = 19;
+  public int JJTBIT_SEQ = 20;
+  public int JJTSTAT = 21;
 
 
   public String[] jjtNodeName = {
@@ -34,6 +36,8 @@ public interface RTSim_ParserTreeConstants
     "RegBusDecl",
     "MemDeclList",
     "MemDecl",
+    "StorDeclList",
+    "StorDecl",
     "RegArrayDeclList",
     "RegArrayDecl",
     "Stat_Seq",
@@ -48,4 +52,4 @@ public interface RTSim_ParserTreeConstants
     "Stat",
   };
 }
-/* JavaCC - OriginalChecksum=22095b9a63567b410ab67dbd7ea857fb (do not edit this line) */
+/* JavaCC - OriginalChecksum=f0ead6589bc9407f341ebe622185eeff (do not edit this line) */

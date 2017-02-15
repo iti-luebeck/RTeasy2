@@ -886,7 +886,7 @@ void memory_decl() #void :
 void storage_decl() #void : 
 {}
 {
-  <STORAGE> storage_decl_list()
+  <STORAGE> stor_decl_list()
 }
 
 void reg_bus_decl_list() #RegBusDeclList :
@@ -919,7 +919,7 @@ void mem_decl() #MemDecl:
   <RPAREN>
 }
 
-void stor_decl_list() #StorDiclList : 
+void stor_decl_list() #StorDeclList : 
 {}
 {
   stor_decl() [<COMMA> stor_decl_list() {jjtThis.setHasNext(true);}]
@@ -929,7 +929,7 @@ void stor_decl() #StorDecl :
 { Token t; BitRange br;}
 {
  t = <ID> {jjtThis.setName(t.image.toString());}
-  [br = bit_range() {jjtThis.setBitRange(br;)}]
+  [br = bit_range() {jjtThis.setBitRange(br);}]
   <LBRACKET>
   t = <DEC_NUM>  {jjtThis.setNumberOfRegisters(Integer.parseInt(t.image.toString()));}
   <RBRACKET>

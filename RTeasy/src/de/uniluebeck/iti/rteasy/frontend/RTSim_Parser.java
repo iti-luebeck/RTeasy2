@@ -57,8 +57,8 @@ public class RTSim_Parser/*@bgen(jjtree)*/implements RTSim_ParserTreeConstants, 
   jjtreeOpenNodeScope(jjtn000);Token t;
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 57:
-        jj_consume_token(57);
+      case 58:
+        jj_consume_token(58);
         t = jj_consume_token(ID);
                          jjtn000.setName(t.image.toString());
         jj_consume_token(SEMICOLON);
@@ -97,16 +97,6 @@ public class RTSim_Parser/*@bgen(jjtree)*/implements RTSim_ParserTreeConstants, 
     throw new Error("Missing return statement in function");
   }
 
-/*
-void interfaceList() #InterfaceList :
-{}
-{
-  ("in" { jjtThis.setSignalDirection(RTSimGlobals.DIR_IN); }
-  |"out" { jjtThis.setSignalDirection(RTSimGlobals.DIR_OUT); })
-  reg_bus_decl_list() ";"
-  [interfaceList() {jjtThis.setHasNext(true);} ]
-}
-*/
   final public void declarations() throws ParseException {
  /*@bgen(jjtree) Decls */
   ASTDecls jjtn000 = new ASTDecls(JJTDECLS);
@@ -188,8 +178,8 @@ void interfaceList() #InterfaceList :
         }
         break;
       case BUS:
-      case 58:
       case 59:
+      case 60:
         dir = bus_decl();
                        jjtree.closeNodeScope(jjtn000, true);
                        jjtc000 = false;
@@ -203,6 +193,13 @@ void interfaceList() #InterfaceList :
                     jjtc000 = false;
                     jjtreeCloseNodeScope(jjtn000);
                    jjtn000.setDeclType(RTSimGlobals.MEMORY);
+        break;
+      case STORAGE:
+        storage_decl();
+                     jjtree.closeNodeScope(jjtn000, true);
+                     jjtc000 = false;
+                     jjtreeCloseNodeScope(jjtn000);
+                    jjtn000.setDeclType(RTSimGlobals.STORAGE);
         break;
       default:
         jj_la1[4] = jj_gen;
@@ -231,23 +228,18 @@ void interfaceList() #InterfaceList :
     }
   }
 
-//void register_decl() #void :
-//{}
-//{
-//  <REGISTER> reg_bus_decl_list()
-//}
   final public int bus_decl() throws ParseException {
   int back = RTSimGlobals.UNUSED;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 58:
     case 59:
+    case 60:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 58:
-        jj_consume_token(58);
-           back = RTSimGlobals.DIR_IN;
-        break;
       case 59:
         jj_consume_token(59);
+           back = RTSimGlobals.DIR_IN;
+        break;
+      case 60:
+        jj_consume_token(60);
            back = RTSimGlobals.DIR_OUT;
         break;
       default:
@@ -271,11 +263,11 @@ void interfaceList() #InterfaceList :
     mem_decl_list();
   }
 
-//void regarray_decl() #void :
-//{}
-//{
-//	<ARRAY> regarray_decl_list()
-//}
+  final public void storage_decl() throws ParseException {
+    jj_consume_token(STORAGE);
+    stor_decl_list();
+  }
+
   final public void reg_bus_decl_list() throws ParseException {
  /*@bgen(jjtree) RegBusDeclList */
   ASTRegBusDeclList jjtn000 = new ASTRegBusDeclList(JJTREGBUSDECLLIST);
@@ -420,6 +412,90 @@ void interfaceList() #InterfaceList :
     }
   }
 
+  final public void stor_decl_list() throws ParseException {
+ /*@bgen(jjtree) StorDeclList */
+  ASTStorDeclList jjtn000 = new ASTStorDeclList(JJTSTORDECLLIST);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtreeOpenNodeScope(jjtn000);
+    try {
+      stor_decl();
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case COMMA:
+        jj_consume_token(COMMA);
+        stor_decl_list();
+                                         jjtn000.setHasNext(true);
+        break;
+      default:
+        jj_la1[10] = jj_gen;
+        ;
+      }
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtreeCloseNodeScope(jjtn000);
+    }
+    }
+  }
+
+  final public void stor_decl() throws ParseException {
+ /*@bgen(jjtree) StorDecl */
+  ASTStorDecl jjtn000 = new ASTStorDecl(JJTSTORDECL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtreeOpenNodeScope(jjtn000);Token t; BitRange br;
+    try {
+      t = jj_consume_token(ID);
+           jjtn000.setName(t.image.toString());
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LPAREN:
+        br = bit_range();
+                     jjtn000.setBitRange(br);
+        break;
+      default:
+        jj_la1[11] = jj_gen;
+        ;
+      }
+      jj_consume_token(LBRACKET);
+      t = jj_consume_token(DEC_NUM);
+                  jjtn000.setNumberOfRegisters(Integer.parseInt(t.image.toString()));
+      jj_consume_token(RBRACKET);
+    } catch (Throwable jjte000) {
+   if (jjtc000) {
+     jjtree.clearNodeScope(jjtn000);
+     jjtc000 = false;
+   } else {
+     jjtree.popNode();
+   }
+   if (jjte000 instanceof RuntimeException) {
+     {if (true) throw (RuntimeException)jjte000;}
+   }
+   if (jjte000 instanceof ParseException) {
+     {if (true) throw (ParseException)jjte000;}
+   }
+   {if (true) throw (Error)jjte000;}
+    } finally {
+   if (jjtc000) {
+     jjtree.closeNodeScope(jjtn000, true);
+     jjtreeCloseNodeScope(jjtn000);
+   }
+    }
+  }
+
   final public void regarray_decl_list() throws ParseException {
  /*@bgen(jjtree) RegArrayDeclList */
   ASTRegArrayDeclList jjtn000 = new ASTRegArrayDeclList(JJTREGARRAYDECLLIST);
@@ -435,7 +511,7 @@ void interfaceList() #InterfaceList :
                                               jjtn000.setHasNext(true);
         break;
       default:
-        jj_la1[10] = jj_gen;
+        jj_la1[12] = jj_gen;
         ;
       }
     } catch (Throwable jjte000) {
@@ -475,7 +551,7 @@ void interfaceList() #InterfaceList :
                      jjtn000.setBitRange(br);
         break;
       default:
-        jj_la1[11] = jj_gen;
+        jj_la1[13] = jj_gen;
         ;
       }
       jj_consume_token(LBRACKET);
@@ -515,7 +591,7 @@ void interfaceList() #InterfaceList :
       t2 = jj_consume_token(DEC_NUM);
       break;
     default:
-      jj_la1[12] = jj_gen;
+      jj_la1[14] = jj_gen;
       ;
     }
     jj_consume_token(RPAREN);
@@ -545,7 +621,7 @@ void interfaceList() #InterfaceList :
                                        jjtn000.setHas2Edges(true);
         break;
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[15] = jj_gen;
         ;
       }
       jj_consume_token(SEMICOLON);
@@ -562,7 +638,7 @@ void interfaceList() #InterfaceList :
                          jjtn000.setHasNext(true);
         break;
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[16] = jj_gen;
         ;
       }
     } catch (Throwable jjte000) {
@@ -619,7 +695,7 @@ void interfaceList() #InterfaceList :
                              jjtn000.setStatNodeType(RTSimGlobals.SWITCH);
         break;
       default:
-        jj_la1[15] = jj_gen;
+        jj_la1[17] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -630,7 +706,7 @@ void interfaceList() #InterfaceList :
                                     jjtn000.setHasNext(true);
         break;
       default:
-        jj_la1[16] = jj_gen;
+        jj_la1[18] = jj_gen;
         ;
       }
     } catch (Throwable jjte000) {
@@ -673,7 +749,7 @@ void interfaceList() #InterfaceList :
                                         jjtn000.setHasElse(true);
         break;
       default:
-        jj_la1[17] = jj_gen;
+        jj_la1[19] = jj_gen;
         ;
       }
       jj_consume_token(FI);
@@ -716,7 +792,7 @@ void interfaceList() #InterfaceList :
                         jjtn000.setDef(true);
         break;
       default:
-        jj_la1[18] = jj_gen;
+        jj_la1[20] = jj_gen;
         ;
       }
       jj_consume_token(RBRACE);
@@ -759,7 +835,7 @@ void interfaceList() #InterfaceList :
                      jjtn000.setHasNext(true);
         break;
       default:
-        jj_la1[19] = jj_gen;
+        jj_la1[21] = jj_gen;
         ;
       }
     } catch (Throwable jjte000) {
@@ -841,7 +917,7 @@ void interfaceList() #InterfaceList :
                     jjtn000.setStatNodeType(RTSimGlobals.IFSTAT);
         break;
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -852,7 +928,7 @@ void interfaceList() #InterfaceList :
                                     jjtn000.setHasNext(true);
         break;
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[23] = jj_gen;
         ;
       }
     } catch (Throwable jjte000) {
@@ -910,14 +986,14 @@ void interfaceList() #InterfaceList :
           jjtn001.setOp(RTSimGlobals.NOR);
           break;
         default:
-          jj_la1[22] = jj_gen;
+          jj_la1[24] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         expression();
         break;
       default:
-        jj_la1[23] = jj_gen;
+        jj_la1[25] = jj_gen;
         ;
       }
     } catch (Throwable jjte001) {
@@ -962,14 +1038,14 @@ void interfaceList() #InterfaceList :
            jjtn001.setOp(RTSimGlobals.NAND);
           break;
         default:
-          jj_la1[24] = jj_gen;
+          jj_la1[26] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         expression_and();
         break;
       default:
-        jj_la1[25] = jj_gen;
+        jj_la1[27] = jj_gen;
         ;
       }
     } catch (Throwable jjte001) {
@@ -1016,7 +1092,7 @@ void interfaceList() #InterfaceList :
         expression_cmpu();
         break;
       default:
-        jj_la1[26] = jj_gen;
+        jj_la1[28] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1062,14 +1138,14 @@ void interfaceList() #InterfaceList :
          jjtn001.setOp(RTSimGlobals.NE);
           break;
         default:
-          jj_la1[27] = jj_gen;
+          jj_la1[29] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         expression_cmpo();
         break;
       default:
-        jj_la1[28] = jj_gen;
+        jj_la1[30] = jj_gen;
         ;
       }
     } catch (Throwable jjte001) {
@@ -1124,14 +1200,14 @@ void interfaceList() #InterfaceList :
          jjtn001.setOp(RTSimGlobals.GE);
           break;
         default:
-          jj_la1[29] = jj_gen;
+          jj_la1[31] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         expression_plus();
         break;
       default:
-        jj_la1[30] = jj_gen;
+        jj_la1[32] = jj_gen;
         ;
       }
     } catch (Throwable jjte001) {
@@ -1176,14 +1252,14 @@ void interfaceList() #InterfaceList :
             jjtn001.setOp(RTSimGlobals.MINUS);
           break;
         default:
-          jj_la1[31] = jj_gen;
+          jj_la1[33] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         expression_plus();
         break;
       default:
-        jj_la1[32] = jj_gen;
+        jj_la1[34] = jj_gen;
         ;
       }
     } catch (Throwable jjte001) {
@@ -1229,7 +1305,7 @@ void interfaceList() #InterfaceList :
         expression_leaf1();
         break;
       default:
-        jj_la1[33] = jj_gen;
+        jj_la1[35] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1269,7 +1345,7 @@ void interfaceList() #InterfaceList :
       expression_leaf2();
       break;
     default:
-      jj_la1[34] = jj_gen;
+      jj_la1[36] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1300,7 +1376,7 @@ void interfaceList() #InterfaceList :
                   jjtn000.setOp(RTSimGlobals.BIT_SEQ);
         break;
       default:
-        jj_la1[35] = jj_gen;
+        jj_la1[37] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1356,7 +1432,7 @@ void interfaceList() #InterfaceList :
                  jjtn000.setValHex(t);
         break;
       default:
-        jj_la1[36] = jj_gen;
+        jj_la1[38] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1383,7 +1459,7 @@ void interfaceList() #InterfaceList :
                      jjtn000.setBitRange(br);
         break;
       default:
-        jj_la1[37] = jj_gen;
+        jj_la1[39] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1410,19 +1486,19 @@ void interfaceList() #InterfaceList :
         jjtn000.setHasReferenceRegister(false);
             break;
           default:
-            jj_la1[38] = jj_gen;
+            jj_la1[40] = jj_gen;
             jj_consume_token(-1);
             throw new ParseException();
           }
           break;
         default:
-          jj_la1[39] = jj_gen;
+          jj_la1[41] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         break;
       default:
-        jj_la1[40] = jj_gen;
+        jj_la1[42] = jj_gen;
         ;
       }
     } catch (Throwable jjte000) {
@@ -1502,7 +1578,7 @@ void interfaceList() #InterfaceList :
           jj_consume_token(TO);
           break;
         default:
-          jj_la1[41] = jj_gen;
+          jj_la1[43] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -1511,12 +1587,12 @@ void interfaceList() #InterfaceList :
           t = jj_consume_token(ID);
                                jjtn000.setIdStr(t.image.toString());
           break;
-        case 60:
-          jj_consume_token(60);
+        case 61:
+          jj_consume_token(61);
                              jjtn000.setGotoEnd();
           break;
         default:
-          jj_la1[42] = jj_gen;
+          jj_la1[44] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -1533,7 +1609,7 @@ void interfaceList() #InterfaceList :
     jjtn000.setStatementType(RTSimGlobals.NOP);
         break;
       default:
-        jj_la1[43] = jj_gen;
+        jj_la1[45] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1588,7 +1664,7 @@ void interfaceList() #InterfaceList :
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   private int jj_gen;
-  final private int[] jj_la1 = new int[44];
+  final private int[] jj_la1 = new int[46];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1596,10 +1672,10 @@ void interfaceList() #InterfaceList :
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x10000,0x0,0x0,0x0,0x0,0x0,0x8000,0x200,0x8000,0x8000,0x200,0x20000,0x80000,0x0,0x0,0x8000,0x0,0x0,0x0,0x0,0x8000,0xc0000000,0xc0000000,0x20000000,0x20000000,0x20003c0,0x10800000,0x10800000,0xc600000,0xc600000,0x3000000,0x3000000,0x20003c0,0x3c0,0x1c0,0x1c0,0x200,0x100,0x40800,0x40800,0x0,0x0,0x0,};
+      jj_la1_0 = new int[] {0x0,0x10000,0x0,0x0,0x0,0x0,0x0,0x8000,0x200,0x8000,0x8000,0x200,0x8000,0x200,0x20000,0x80000,0x0,0x0,0x8000,0x0,0x0,0x0,0x0,0x8000,0xc0000000,0xc0000000,0x20000000,0x20000000,0x20003c0,0x10800000,0x10800000,0xc600000,0xc600000,0x3000000,0x3000000,0x20003c0,0x3c0,0x1c0,0x1c0,0x200,0x100,0x40800,0x40800,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x2000000,0x0,0x200,0x202000,0xc001c00,0xc000000,0xc000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x33c044,0x33c044,0x0,0x10,0x100,0x80,0x33c004,0x0,0x1,0x1,0x2,0x2,0x280000,0x0,0x0,0x0,0x0,0x0,0x0,0x200000,0x200000,0x200000,0x0,0x0,0x200000,0x0,0x0,0x30000,0x10200000,0x33c000,};
+      jj_la1_1 = new int[] {0x4000000,0x0,0x200,0x404000,0x18003c00,0x18000000,0x18000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x678044,0x678044,0x0,0x10,0x100,0x80,0x678004,0x0,0x1,0x1,0x2,0x2,0x500000,0x0,0x0,0x0,0x0,0x0,0x0,0x400000,0x400000,0x400000,0x0,0x0,0x400000,0x0,0x0,0x60000,0x20400000,0x678000,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[1];
   private boolean jj_rescan = false;
@@ -1616,7 +1692,7 @@ void interfaceList() #InterfaceList :
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 44; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 46; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1632,7 +1708,7 @@ void interfaceList() #InterfaceList :
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 44; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 46; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1643,7 +1719,7 @@ void interfaceList() #InterfaceList :
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 44; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 46; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1655,7 +1731,7 @@ void interfaceList() #InterfaceList :
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 44; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 46; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1665,7 +1741,7 @@ void interfaceList() #InterfaceList :
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 44; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 46; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1676,7 +1752,7 @@ void interfaceList() #InterfaceList :
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 44; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 46; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1788,12 +1864,12 @@ void interfaceList() #InterfaceList :
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[61];
+    boolean[] la1tokens = new boolean[62];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 44; i++) {
+    for (int i = 0; i < 46; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1805,7 +1881,7 @@ void interfaceList() #InterfaceList :
         }
       }
     }
-    for (int i = 0; i < 61; i++) {
+    for (int i = 0; i < 62; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

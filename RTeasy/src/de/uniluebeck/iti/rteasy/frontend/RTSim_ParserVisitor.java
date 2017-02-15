@@ -11,6 +11,8 @@ public interface RTSim_ParserVisitor
   public Object visit(ASTRegBusDecl node, Object data);
   public Object visit(ASTMemDeclList node, Object data);
   public Object visit(ASTMemDecl node, Object data);
+  public Object visit(ASTStorDeclList node, Object data);
+  public Object visit(ASTStorDecl node, Object data);
   public Object visit(ASTRegArrayDeclList node, Object data);
   public Object visit(ASTRegArrayDecl node, Object data);
   public Object visit(ASTStat_Seq node, Object data);
@@ -24,4 +26,4 @@ public interface RTSim_ParserVisitor
   public Object visit(ASTBit_Seq node, Object data);
   public Object visit(ASTStat node, Object data);
 }
-/* JavaCC - OriginalChecksum=45f922101c397a2274f4c5518e86bdb8 (do not edit this line) */
+/* JavaCC - OriginalChecksum=bdc4e3e4e8e7202dad3402113846858c (do not edit this line) */

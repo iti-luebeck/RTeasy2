@@ -89,31 +89,33 @@ public interface RTSim_ParserConstants {
   /** RegularExpression Id. */
   int BUS = 43;
   /** RegularExpression Id. */
-  int MEMORY = 44;
+  int STORAGE = 44;
   /** RegularExpression Id. */
-  int ARRAY = 45;
+  int MEMORY = 45;
   /** RegularExpression Id. */
-  int READ = 46;
+  int ARRAY = 46;
   /** RegularExpression Id. */
-  int WRITE = 47;
+  int READ = 47;
   /** RegularExpression Id. */
-  int GOTO = 48;
+  int WRITE = 48;
   /** RegularExpression Id. */
-  int GO = 49;
+  int GOTO = 49;
   /** RegularExpression Id. */
-  int TO = 50;
+  int GO = 50;
   /** RegularExpression Id. */
-  int NOT = 51;
+  int TO = 51;
   /** RegularExpression Id. */
-  int NOP = 52;
+  int NOT = 52;
   /** RegularExpression Id. */
-  int ID = 53;
+  int NOP = 53;
   /** RegularExpression Id. */
-  int IDENTIFIER = 54;
+  int ID = 54;
   /** RegularExpression Id. */
-  int LETTER = 55;
+  int IDENTIFIER = 55;
   /** RegularExpression Id. */
-  int PART_LETTER = 56;
+  int LETTER = 56;
+  /** RegularExpression Id. */
+  int PART_LETTER = 57;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -164,6 +166,7 @@ public interface RTSim_ParserConstants {
     "\"declare\"",
     "\"register\"",
     "\"bus\"",
+    "\"storage\"",
     "\"memory\"",
     "\"array\"",
     "\"read\"",
