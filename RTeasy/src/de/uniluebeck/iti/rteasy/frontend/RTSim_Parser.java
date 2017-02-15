@@ -472,7 +472,7 @@ public class RTSim_Parser/*@bgen(jjtree)*/implements RTSim_ParserTreeConstants, 
       }
       jj_consume_token(LBRACKET);
       t = jj_consume_token(DEC_NUM);
-                  jjtn000.setNumberOfRegisters(Integer.parseInt(t.image.toString()));
+                  jjtn000.setNumberOfMemCells(Integer.parseInt(t.image.toString()));
       jj_consume_token(RBRACKET);
     } catch (Throwable jjte000) {
    if (jjtc000) {

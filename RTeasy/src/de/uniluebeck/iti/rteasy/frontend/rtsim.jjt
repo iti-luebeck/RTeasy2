@@ -931,7 +931,7 @@ void stor_decl() #StorDecl :
  t = <ID> {jjtThis.setName(t.image.toString());}
   [br = bit_range() {jjtThis.setBitRange(br);}]
   <LBRACKET>
-  t = <DEC_NUM>  {jjtThis.setNumberOfRegisters(Integer.parseInt(t.image.toString()));}
+  t = <DEC_NUM>  {jjtThis.setNumberOfMemCells(Integer.parseInt(t.image.toString()));}
   <RBRACKET>
 }
 
