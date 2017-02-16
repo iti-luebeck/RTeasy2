@@ -26,26 +26,63 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-
 package de.uniluebeck.iti.rteasy.kernel;
 
+import de.uniluebeck.iti.rteasy.RTSimGlobals;
 import de.uniluebeck.iti.rteasy.frontend.ASTStorDecl;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Hashtable;
 
 /**
  *
  * @author Jasper Schwinghammer
  */
-public class Storage extends SimulationObject{
-    
-    
-    public Storage(ASTStorDecl decl){
+public class Storage extends SimulationObject {
+
+    private Hashtable stor;
+    private String name;
+    private int width;
+    private int length;
+    private BitRange br;
+
+    public Storage(ASTStorDecl decl) {
         super(decl.getName(), decl.getPositionRange());
-        
+        this.name = decl.getName();
+        this.width = decl.getWidth();
+        this.length = decl.getNumberOfMemCells();
+        stor = new Hashtable();
+
+    }
+
+    /**
+     * (taken from Memory.java, used to bring the whole memory data to the gui)
+     * @return the current state of the memory as array
+     */
+    public ArrayList getUsedCellsSorted() {
+        ArrayList cells = new ArrayList(stor.keySet());
+        for (int i = 0; i < cells.size(); i++) {
+            cells.set(i, ((BitVector) cells.get(i)).toBoolArray(width));
+        }
+        Collections.sort(cells, new BoolArrayComparator());
+        return cells;
+    }
+
+    /**
+     * Inner class to use the boolArrayCompare method from RTSimGlobals to compare two numbers represented by bitwise booleans
+     */
+    class BoolArrayComparator implements Comparator {
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            return RTSimGlobals.boolArrayCompare((boolean[]) o1, (boolean[]) o2);
+        }
     }
 
     @Override
     public String getVHDLName() {
-        return "stor_"+getIdStr();
+        return "stor_" + getIdStr();
     }
-    
+
 }
