@@ -55,7 +55,7 @@ public class MemoryFrameTableModel extends AbstractTableModel {
         memaw = m.getAddrWidth();
         taddr = new boolean[memaw];
         memdw = m.getDataWidth();
-        memSize = new BigInteger("2").pow(memaw).subtract(BigInteger.ONE);
+        memSize = new BigInteger("2").pow(memaw);
         curPage = BigInteger.ONE;
         offset = BigInteger.ZERO;
         BigDecimal memSizeBD = new BigDecimal(memSize).divide(new BigDecimal("" + pageSize)).setScale(0, RoundingMode.UP);
