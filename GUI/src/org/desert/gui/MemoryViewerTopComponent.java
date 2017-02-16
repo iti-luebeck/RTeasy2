@@ -25,10 +25,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.desert.helper.FileOperationsHelper;
 import org.desert.helper.WrapperIOLog;
@@ -276,7 +279,7 @@ public final class MemoryViewerTopComponent extends TopComponent {
     }
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        File file = FileOperationsHelper.openFileDialog();
+        File file = FileOperationsHelper.openFileDialog(new FileNameExtensionFilter("RTeasy2 memory dump - r2md", "r2md"));
 
         if (file == null) {
             return;
@@ -308,10 +311,12 @@ public final class MemoryViewerTopComponent extends TopComponent {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         try {
-            File f = FileOperationsHelper.openFileDialog();
-            
+            File f = FileOperationsHelper.saveFileDialog(new FileNameExtensionFilter("RTeasy2 memory dump - r2md", "r2md"));
             if(f == null) {
                 return;
+            }
+            if(!Pattern.matches(".+\\.r2md", f.getName())){
+                f = new File(f.getAbsolutePath()+".r2md");
             }
             
             FileWriter fw;
