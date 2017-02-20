@@ -44,5 +44,6 @@ public class ASTDecl extends RTSimNode {
   public ASTRegBusDeclList getRegisterDecls() { return (ASTRegBusDeclList) jjtGetChild(0); }
   public ASTRegBusDeclList getBusDecls() { return (ASTRegBusDeclList) jjtGetChild(0); }
   public ASTMemDeclList getMemoryDecls() { return (ASTMemDeclList) jjtGetChild(0); }
+  public ASTStorDeclList getStorageDecls() { return (ASTStorDeclList) jjtGetChild(0);}
   public ASTRegArrayDeclList getRegArrayDecls() { return (ASTRegArrayDeclList) jjtGetChild(0);}
 }

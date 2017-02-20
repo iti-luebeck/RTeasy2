@@ -33,7 +33,8 @@ import de.uniluebeck.iti.rteasy.frontend.ASTStorDecl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -41,23 +42,32 @@ import java.util.Hashtable;
  */
 public class Storage extends SimulationObject {
 
-    private Hashtable stor;
+    private Map<Integer, BitVector> stor;
+    private Map<Integer, BitVector> storNew;
+    private boolean[] written;
     private String name;
     private int width;
     private int length;
     private BitRange br;
+    private boolean direction = true;
+    private int offset = 0;
 
     public Storage(ASTStorDecl decl) {
         super(decl.getName(), decl.getPositionRange());
+        this.br = decl.getBitRange();
         this.name = decl.getName();
         this.width = decl.getWidth();
         this.length = decl.getNumberOfMemCells();
-        stor = new Hashtable();
-
+        stor = new HashMap();
+        storNew = new HashMap();
+        written = new boolean[length];
+        this.direction = direction;
+        this.offset = offset;
     }
 
     /**
      * (taken from Memory.java, used to bring the whole memory data to the gui)
+     *
      * @return the current state of the memory as array
      */
     public ArrayList getUsedCellsSorted() {
@@ -70,7 +80,8 @@ public class Storage extends SimulationObject {
     }
 
     /**
-     * Inner class to use the boolArrayCompare method from RTSimGlobals to compare two numbers represented by bitwise booleans
+     * Inner class to use the boolArrayCompare method from RTSimGlobals to
+     * compare two numbers represented by bitwise booleans
      */
     class BoolArrayComparator implements Comparator {
 
@@ -83,6 +94,24 @@ public class Storage extends SimulationObject {
     @Override
     public String getVHDLName() {
         return "stor_" + getIdStr();
+    }
+
+    public int getWidth() {
+        return width;
+    }
+    
+    public String getPrettyDecl() {
+        return name;
+    }
+
+    public boolean checkBitRange(BitRange br) {
+        if (direction) {
+            return br.begin >= br.end && br.begin <= (offset + width - 1)
+                    && br.end >= offset;
+        } else {
+            return br.begin <= br.end && br.begin >= offset
+                    && br.end <= (offset + width - 1);
+        }
     }
 
 }
