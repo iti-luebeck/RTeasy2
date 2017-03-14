@@ -543,9 +543,6 @@ public class RTSim_SemAna {
     }
 
     public int checkStorageDecl(ASTStorDecl storDecl) {
-        int errorCount = 0;
-        String err;
-        if (errorCount == 0) {
             Storage stor = insertStorage(storDecl);
             if (stor != null) {
                 storDecl.setStorage(stor);
@@ -553,8 +550,7 @@ public class RTSim_SemAna {
             } else {
                 insertSymbolPreviouslyDeclaredError(storDecl.getName(), "Storage", storDecl.getPositionRange());
             }
-        }
-        return errorCount;
+        return 1;
     }
 
     public int checkRegArrayDecls(ASTRegArrayDeclList list) {
@@ -735,7 +731,6 @@ public class RTSim_SemAna {
         RegisterArray ra;
         if (outer.getStatNodeType() == RTSimGlobals.STAT
                 && outer.getStatement().getStatementType() == RTSimGlobals.ASSIGN) {
-            //TODO: This is not complete, see https://github.com/iti-luebeck/RTeasy2/issues/26
             ra = getRegArray(outer.getStatement().getBitSequence().getTargetId());
             if (ra != null) {
                 registerArrays.add(ra);
@@ -745,7 +740,6 @@ public class RTSim_SemAna {
             outer = outer.next();
             if (outer.getStatNodeType() == RTSimGlobals.STAT
                     && outer.getStatement().getStatementType() == RTSimGlobals.ASSIGN) {
-                //TODO: This is not complete, see https://github.com/iti-luebeck/RTeasy2/issues/26
                 ra = getRegArray(outer.getStatement().getBitSequence().getTargetId());
 
                 if (ra != null) {
@@ -873,8 +867,14 @@ public class RTSim_SemAna {
                 errorCount += ci.errorCount;
                 errorCount += checkExpression(stat.getExpression(), ci.width);
                 stat.setStatementType(RTSimGlobals.ASSIGN);
+                stat.setRegisterArrayOnLeftSide(bitSeqContainsRegisterArray(stat.getBitSequence()));
                 stat.setStorageOnLeftSide(bitSeqContainsStorage(stat.getBitSequence())); // Pruefen, ob Zuweisung an Storage enthalten.
                 stat.setBusOnLeftSide(bitSeqContainsBus(stat.getBitSequence())); // Pruefen, ob Zuweisung an Bus enthalten
+                //Check if there is a bus or storage or register on the left side and if it is part of a sequence of registers.
+                if((stat.hasBusOnLeftSide()||stat.hasStorageOnLeftSide()||stat.hasRegisterArrayOnLeftSide())&&stat.getBitSequence().hasNext()) {
+                    errorCount++;
+                    insertError(IUI.get("ERROR_BITSEQ_CONTAINS_ILLEGAL_REGISTER"),stat.getPositionRange());
+                }
                 // Zuweisung Bus <- Bus bzw. InBus <- irgendwas vermeiden
                 if (stat.getBitSequence().containsBus()) {
                     if (stat.getExpression().containsBus()) {
@@ -969,7 +969,11 @@ public class RTSim_SemAna {
             return false;
         }
     }
-    
+    /**
+     * Checks if a bit_seq on the left side of a statement contains a storage
+     * @param bit_seq
+     * @return true if there is a Storage on the left side
+     */
     public boolean bitSeqContainsStorage(ASTBit_Seq bit_seq) {
         Storage stor = getStorage(bit_seq.getTargetId());
         if (stor != null) {
@@ -977,6 +981,22 @@ public class RTSim_SemAna {
         }
         if (bit_seq.hasNext()) {
             return bitSeqContainsStorage(bit_seq.next());
+        }
+        return false;
+    }
+    
+    /**
+     * Checks if a bit_seq on the left side of a statement contains a Register Array
+     * @param bit_seq
+     * @return true if there is a Register Array on the left side
+     */
+    public boolean bitSeqContainsRegisterArray(ASTBit_Seq bit_seq) {
+        RegisterArray regA = getRegArray(bit_seq.getTargetId());
+        if (regA != null) {
+            return true;
+        }
+        if (bit_seq.hasNext()){
+            return  bitSeqContainsRegisterArray(bit_seq.next());
         }
         return false;
     }

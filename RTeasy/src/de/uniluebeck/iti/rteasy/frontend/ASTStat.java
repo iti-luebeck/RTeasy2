@@ -38,6 +38,7 @@ public class ASTStat extends RTSimNode {
     private String idStr = null;
     private Label label = null;
     private Memory memory = null;
+    private boolean regArrayOnLeftSide = false;
     private boolean busOnLeftSide = false;
     private boolean storOnLeftSide = false;
     private boolean isGotoEnd = false;
@@ -62,8 +63,16 @@ public class ASTStat extends RTSimNode {
         this.storOnLeftSide = bitSeqContainsStorage;
     }
     
+    public void setRegisterArrayOnLeftSide(boolean bitSeqContainsRegisterArray) {
+        this.regArrayOnLeftSide = bitSeqContainsRegisterArray;
+    }
+    
     public boolean hasStorageOnLeftSide() {
         return storOnLeftSide;
+    }
+    
+    public boolean hasRegisterArrayOnLeftSide() {
+        return regArrayOnLeftSide;
     }
 
     public boolean hasBusOnLeftSide() {
