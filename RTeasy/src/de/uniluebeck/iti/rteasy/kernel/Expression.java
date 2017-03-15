@@ -53,6 +53,7 @@ public class Expression {
   private int base = RTSimGlobals.BASE_BIN;
   private boolean containsBus = false;
   private boolean containsRegArray = false;
+  private boolean containsStorage = false;
 
   /**
    * Expression aus BitVector erzeugen
@@ -77,6 +78,7 @@ public class Expression {
       width = bitSequence.getWidth();
       containsBus = bitSequence.containsBus();
       containsRegArray = bitSequence.containsRegArray();
+      containsStorage = bitSequence.containsStorage();
       type = RTSimGlobals.BIT_SEQ;
   }
 
@@ -136,6 +138,7 @@ public class Expression {
         width = bitSequence.getWidth();
         containsBus = bitSequence.containsBus();
         containsRegArray = bitSequence.containsRegArray();
+        containsStorage = bitSequence.containsStorage();
         break;
       case RTSimGlobals.SIGN:
         width = 1;
@@ -251,6 +254,8 @@ public class Expression {
   public boolean containsBus() { return containsBus; }
   
   public boolean containsRegArray() { return containsRegArray; }
+  
+  public boolean containsSotrage()  { return containsStorage; }
 
   /**
    * gibt die Anzeige-Basis als in RTSimGlobals definierte Konstante

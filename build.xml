@@ -8,7 +8,7 @@
     
     <target name="branding" depends="suite.branding">
         <exec executable="git" failifexecutionfails="false" logError="true" outputproperty="app.git.version">
-            <arg line="describe --tags --always"/>
+            <arg line="rev-parse HEAD"/>
         </exec>
 
         <mkdir dir="${basedir}/branding/core/core.jar/org/netbeans/core/startup"/>

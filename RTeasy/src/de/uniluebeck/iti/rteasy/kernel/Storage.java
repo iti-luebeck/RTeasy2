@@ -44,7 +44,6 @@ public class Storage extends SimulationObject {
 
     private Map<Integer, BitVector> stor;
     private Map<Integer, BitVector> storNew;
-    private boolean[] written;
     private String name;
     private int width;
     private int length;
@@ -60,9 +59,32 @@ public class Storage extends SimulationObject {
         this.length = decl.getNumberOfMemCells();
         stor = new HashMap();
         storNew = new HashMap();
-        written = new boolean[length];
         this.direction = direction;
         this.offset = offset;
+    }
+    
+    public void set(int address, BitVector bv) {
+        if(!checkIfWrittenThisCicle(address)){
+            storNew.put(address, bv);
+        } else {
+            //ERROR!
+        }
+    }
+    
+    public BitVector get(int address) {
+        if(stor.containsKey(address)) return stor.get(address);
+        else {
+            return new BitVector();
+        }
+    }
+    
+    public void commit() {
+        stor.putAll(storNew);
+    }
+    
+    public void clear() {
+        stor.clear();
+        storNew.clear();
     }
 
     /**
@@ -98,6 +120,27 @@ public class Storage extends SimulationObject {
 
     public int getWidth() {
         return width;
+    }
+    
+    public int getLength() {
+        return length;
+    }
+    
+    public boolean getDirection() {
+        return direction;
+    }
+    /**
+     * 
+     * @param i the address of the cell to be checked
+     * @return true if the memory cell was already written this cycle
+     */
+    public boolean checkIfWrittenThisCicle(int i){
+        if(storNew.containsKey(i)) return true;
+        else return false;
+    }
+    
+    public int getOffset() {
+        return offset;
     }
     
     public String getPrettyDecl() {

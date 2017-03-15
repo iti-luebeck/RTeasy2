@@ -33,6 +33,7 @@ package de.uniluebeck.iti.rteasy.frontend;
 import de.uniluebeck.iti.rteasy.kernel.BitRange;
 import de.uniluebeck.iti.rteasy.kernel.Bus;
 import de.uniluebeck.iti.rteasy.kernel.SimulationObject;
+import de.uniluebeck.iti.rteasy.kernel.Storage;
 
 public class ASTBit_Seq extends RTSimNode {
   private String targetId;
@@ -57,6 +58,12 @@ public boolean containsBus() {
     if(hasNext) return next().containsBus();
     else return false;
   }
+
+public boolean containsStorage() {
+    if(targetRef != null && targetRef instanceof Storage) return true;
+    if(hasNext) return next().containsStorage();
+    else return false;
+}
 
  
 

@@ -10,6 +10,7 @@
     <fontcolor name="conditional" default="conditional" foreColor="blue">
     </fontcolor>
     <fontcolor name="memory" default="memory" foreColor="red"/>
+    <fontcolor name="storage" default="storage" foreColor="red"/>
     <fontcolor name="keyword" default="keyword" foreColor="blue">
         <font style="bold"/>
     </fontcolor>

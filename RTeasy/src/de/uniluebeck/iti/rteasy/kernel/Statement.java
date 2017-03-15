@@ -47,6 +47,7 @@ public class Statement {
   private Expression right = null;
   private Label label = null;
   private Memory memory = null;
+  private boolean storageOnLeftSide = false;
   private boolean busOnLeftSide = false;
   private int controlSignal = -1;
   private boolean ifexpr = false;
@@ -84,15 +85,15 @@ public class Statement {
 
   public Statement copy() {
     return new Statement(pr,pc,statement_type,left,right,label,memory,
-			 busOnLeftSide,controlSignal);
+			 storageOnLeftSide,busOnLeftSide,controlSignal);
   }
 
   Statement(PositionRange tpr, ProgramControl tpc, int tst,
 	    BitSequence toLeft, Expression toRight, Label toLabel,
-	    Memory toMemory, boolean tBLS, int tcS) {
+	    Memory toMemory,boolean storageOnleftSide ,boolean tBLS, int tcS) {
     pr = tpr; pc = tpc; statement_type = tst; left = toLeft; right = toRight;
     label = toLabel; memory = toMemory; busOnLeftSide = tBLS;
-    controlSignal = tcS;
+    controlSignal = tcS; this.storageOnLeftSide = storageOnleftSide;
     if(tst == RTSimGlobals.ASSIGN) right.sinkWidth(left.getWidth());
   }
 
@@ -121,6 +122,7 @@ public class Statement {
     statement_type = stat.getStatementType();
     switch(statement_type) {
       case RTSimGlobals.ASSIGN:
+        storageOnLeftSide = stat.hasStorageOnLeftSide();
         busOnLeftSide = stat.hasBusOnLeftSide();
         left = new BitSequence(pc,stat.getBitSequence());
         right = new Expression(pc,stat.getExpression());
@@ -164,6 +166,8 @@ public class Statement {
   }
   
   public boolean hasBusOnLeftSide() { return busOnLeftSide; }
+  
+  public boolean hasStorageOnLeftSide() { return storageOnLeftSide;}
 
   public void emitDeltaOperation(String indent, PrintWriter out,
 				 SignalsData signalsData) {
