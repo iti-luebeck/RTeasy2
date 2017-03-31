@@ -212,6 +212,8 @@ public class BitSequence {
                         pc.raiseRuntimeError("Your address value is too big for storage: " + stor.getIdStr() + ". Maximum value is " + (stor.getLength()-1) + ".", pr);
                     }
 
+                } else {
+                    pc.raiseRuntimeError("Storage cell "+ registerNumberOrStorageAddress +" of storage "+ stor.getIdStr()+" is written twice in this cycle.", pr);
                 }
             }
             if (ref instanceof Register) {
