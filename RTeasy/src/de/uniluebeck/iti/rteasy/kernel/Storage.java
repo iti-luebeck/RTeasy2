@@ -140,7 +140,7 @@ public class Storage extends SimulationObject {
         int dw = getWidth();
         boolean back[] = new boolean[dw];
         int addressInt = 0;
-        int addressWidth = (int)(Math.log10(length)/Math.log10(2.));
+        int addressWidth = addrMaxWidth;
         for (int i = 0; i < addressWidth; i++) {
             addressInt += (address[i] ? 1 : 0) * Math.pow(2, i);
         }
