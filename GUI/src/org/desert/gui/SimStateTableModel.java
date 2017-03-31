@@ -35,6 +35,7 @@ import de.uniluebeck.iti.rteasy.kernel.Bus;
 import de.uniluebeck.iti.rteasy.kernel.Memory;
 import de.uniluebeck.iti.rteasy.kernel.Register;
 import de.uniluebeck.iti.rteasy.kernel.RegisterArray;
+import de.uniluebeck.iti.rteasy.kernel.Storage;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -47,18 +48,19 @@ public class SimStateTableModel extends AbstractTableModel {
     private int register_offset;
     private int bus_offset;
     private int memory_offset;
+    private int storage_offset;
     //neu
     private int regar_offset;
     private ArrayList<Register> regList;
     private ArrayList<Bus> busList;
     private ArrayList<Memory> memList;
+    private ArrayList<Storage> storList;
     private ArrayList<RegisterArray> regarList;
     private SimObjectsBase regBase[], busBase[];
     private int rowsUsed;
     private Component parent;
-    private RegisterArray ra1;
 
-    SimStateTableModel(LinkedList registerOrder, LinkedList busOrder, LinkedList memoryOrder,
+    SimStateTableModel(LinkedList registerOrder, LinkedList busOrder, LinkedList memoryOrder, LinkedList storageOrder,
             LinkedList regarOrder, Component tp) {
         parent = tp;
         int i = 0;
@@ -79,9 +81,11 @@ public class SimStateTableModel extends AbstractTableModel {
         }
         memory_offset = bus_offset + busList.size() + 2;
         memList = new ArrayList(memoryOrder);
+        storage_offset = memory_offset + memList.size() + 2;
+        storList = new ArrayList(storageOrder);
         //carina für Registerarrays:
-        regar_offset = memory_offset + memList.size() + 2;
-        regarList = new ArrayList<RegisterArray>(regarOrder);
+        regar_offset = storage_offset + storList.size() + 2;
+        regarList = new ArrayList(regarOrder);
         rowsUsed = regar_offset + regarList.size() + 1;
     }
 
@@ -93,6 +97,8 @@ public class SimStateTableModel extends AbstractTableModel {
                 || (row >= bus_offset
                 && row < (memory_offset - 2))
                 || (row >= memory_offset
+                && row < (storage_offset -2))
+                || (row >= storage_offset
                 && row < (regar_offset - 2)
                 && col == 1)
                 || (row >= regar_offset
@@ -152,7 +158,7 @@ public class SimStateTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int row, int col) {
-        if (row == (bus_offset - 2) || row == (memory_offset - 2) || row == (regar_offset - 2)) {
+        if (row == (bus_offset - 2) || row == (memory_offset - 2) || row == (storage_offset - 2) || row == (regar_offset - 2)) {
             return "";
         }
         if (row == 0) {
@@ -172,6 +178,13 @@ public class SimStateTableModel extends AbstractTableModel {
         if (row == (memory_offset - 1)) {
             if (col == 0) {
                 return NbBundle.getMessage(SimStateTableModel.class, "LABEL_MEMORIES") + ":";
+            } else {
+                return "";
+            }
+        }
+        if (row ==(storage_offset -1)) {
+            if (col == 0) {
+                return NbBundle.getMessage(SimStateTableModel.class, "LABEL_STORAGES") +":";
             } else {
                 return "";
             }
@@ -209,12 +222,22 @@ public class SimStateTableModel extends AbstractTableModel {
             }
         }
         //neu
-        if (row < (regar_offset - 2)) {
+        if (row < (storage_offset - 2)) {
             Memory m = (Memory) memList.get(row - memory_offset);
             if (col == 0) {
                 return m.getPrettyDecl();
             } else if (col == 1) {
                 return m;
+            } else {
+                return "";
+            }
+        }
+        if (row <(regar_offset - 2)) {
+            Storage s = storList.get(row - storage_offset);
+            if (col == 0) {
+                return s.getPrettyDecl();
+            } else if (col == 1) {
+                return s;
             } else {
                 return "";
             }

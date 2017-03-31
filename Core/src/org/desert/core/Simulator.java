@@ -90,7 +90,7 @@ public class Simulator {
             CentralLookup.getDefault().add(new Simulator());
             Simulator.mode = Modes.simulate;
             WindowHelper.getLastFocusedEditor().setEditable(false);
-            openSimStateWindow(semAna.getRegisterOrder(), semAna.getBusOrder(), semAna.getMemoryOrder(), semAna.getRegArrayOrder());
+            openSimStateWindow(semAna.getRegisterOrder(), semAna.getBusOrder(), semAna.getMemoryOrder(), semAna.getStorageOrder(), semAna.getRegArrayOrder());
             openBreakPointViewer();
 
             WrapperIOLog.logMsg(NbBundle.getMessage(Simulator.class, "MSG_COMPILE_SUCCESS"));
@@ -416,7 +416,7 @@ public class Simulator {
     }
 
     private static void openSimStateWindow(LinkedList registerOrder,
-            LinkedList busOrder, LinkedList memoryOrder, LinkedList regArrOrder) {
+            LinkedList busOrder, LinkedList memoryOrder,LinkedList storageOrder, LinkedList regArrOrder) {
         SimStateTopComponent simStateTopCmpnt = (SimStateTopComponent) WindowManager.getDefault().findTopComponent("SimStateTopComponent");
 
         if (simStateTopCmpnt == null) {
@@ -430,7 +430,7 @@ public class Simulator {
             simStateTopCmpnt.open();
         }
 
-        simStateTopCmpnt.setData(registerOrder, busOrder, memoryOrder, regArrOrder);
+        simStateTopCmpnt.setData(registerOrder, busOrder, memoryOrder,storageOrder, regArrOrder);
         simStateTopCmpnt.initTable();
     }
 

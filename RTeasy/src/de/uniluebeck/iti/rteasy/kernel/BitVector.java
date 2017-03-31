@@ -60,6 +60,10 @@ public class BitVector {
     val = s;
     cut_zeros();
   }
+  
+  public BitVector(int i) {
+      val = Integer.toBinaryString(i);
+  }
 
   public BitVector(BitVector b) {
     val = b.val;

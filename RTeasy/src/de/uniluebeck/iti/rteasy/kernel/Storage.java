@@ -47,6 +47,8 @@ public class Storage extends SimulationObject {
     private String name;
     private int width;
     private int length;
+    private int addrMaxWidth;
+    private int lastWritten = 0;
     private BitRange br;
     private boolean direction = true;
     private int offset = 0;
@@ -61,27 +63,30 @@ public class Storage extends SimulationObject {
         storNew = new HashMap();
         this.direction = direction;
         this.offset = offset;
+        this.addrMaxWidth = (int)(Math.log10(length)/Math.log10(2.));
     }
-    
+
     public void set(int address, BitVector bv) {
-        if(!checkIfWrittenThisCicle(address)){
+        if (!checkIfWrittenThisCicle(address)) {
             storNew.put(address, bv);
+            lastWritten = address;
         } else {
             //ERROR!
         }
     }
-    
+
     public BitVector get(int address) {
-        if(stor.containsKey(address)) return stor.get(address);
-        else {
+        if (stor.containsKey(address)) {
+            return stor.get(address);
+        } else {
             return new BitVector();
         }
     }
-    
+
     public void commit() {
         stor.putAll(storNew);
     }
-    
+
     public void clear() {
         stor.clear();
         storNew.clear();
@@ -95,7 +100,7 @@ public class Storage extends SimulationObject {
     public ArrayList getUsedCellsSorted() {
         ArrayList cells = new ArrayList(stor.keySet());
         for (int i = 0; i < cells.size(); i++) {
-            cells.set(i, ((BitVector) cells.get(i)).toBoolArray(width));
+            cells.set(i, (new BitVector((int)cells.get(i))).toBoolArray(addrMaxWidth));
         }
         Collections.sort(cells, new BoolArrayComparator());
         return cells;
@@ -113,6 +118,49 @@ public class Storage extends SimulationObject {
         }
     }
 
+    public void setDataAt(boolean address[], boolean data[]) {
+        int dw = width;
+        int aw = addrMaxWidth;
+        int width = address.length <= aw ? address.length : aw;
+        int addressInt = 0;
+        for (int i = 0; i < width; i++) {
+            addressInt += (address[i] ? 1 : 0) * Math.pow(2, i);
+        }
+        width = data.length <= dw ? data.length : dw;
+        String s = "";
+        for (int i = 0; i < width; i++) {
+            s = (data[i] ? "1" : "0") + s;
+        }
+        BitVector dbv = new BitVector(s);
+        stor.put(addressInt, dbv);
+    }
+
+    public boolean[] getDataAt(boolean address[]) {
+        int dw = getWidth();
+        boolean back[] = new boolean[dw];
+        int addressInt = 0;
+        int addressWidth = (int)(Math.log10(length)/Math.log10(2.));
+        for (int i = 0; i < addressWidth; i++) {
+            addressInt += (address[i] ? 1 : 0) * Math.pow(2, i);
+        }
+        if (stor.containsKey(addressInt)) {
+            BitVector bv = (BitVector) stor.get(addressInt);
+            for (int i = 0; i < dw; i++) {
+                back[i] = bv.get(i);
+            }
+        } else {
+            for (int i = 0; i < dw; i++) {
+                back[i] = false;
+            }
+        }
+        return back;
+    }
+    
+    public boolean[] getAddr() {
+        BitVector bv = new BitVector(lastWritten);
+        return bv.toBoolArray(bv.getWidth());
+    }
+
     @Override
     public String getVHDLName() {
         return "stor_" + getIdStr();
@@ -121,28 +169,36 @@ public class Storage extends SimulationObject {
     public int getWidth() {
         return width;
     }
-    
+
     public int getLength() {
         return length;
     }
     
+    public int getMaxAddrWidth() {
+        return addrMaxWidth;
+    }
+
     public boolean getDirection() {
         return direction;
     }
+
     /**
-     * 
+     *
      * @param i the address of the cell to be checked
      * @return true if the memory cell was already written this cycle
      */
-    public boolean checkIfWrittenThisCicle(int i){
-        if(storNew.containsKey(i)) return true;
-        else return false;
+    public boolean checkIfWrittenThisCicle(int i) {
+        if (storNew.containsKey(i)) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
+
     public int getOffset() {
         return offset;
     }
-    
+
     public String getPrettyDecl() {
         return name;
     }

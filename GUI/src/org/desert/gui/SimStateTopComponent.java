@@ -9,6 +9,7 @@ import de.uniluebeck.iti.rteasy.RTSimGlobals;
 import de.uniluebeck.iti.rteasy.SimObjectsBase;
 import de.uniluebeck.iti.rteasy.kernel.Memory;
 import de.uniluebeck.iti.rteasy.kernel.RegisterArray;
+import de.uniluebeck.iti.rteasy.kernel.Storage;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -48,6 +49,7 @@ public final class SimStateTopComponent extends TopComponent {
 
     public SimStateTableModel model;
     private LinkedList<Memory> memories;
+    private LinkedList<Storage> storages;
     private LinkedList<RegisterArray> regArrays;
     private MemoryCellRenderer memoryCellRenderer;
 
@@ -99,11 +101,13 @@ public final class SimStateTopComponent extends TopComponent {
     public void setUpMRCellEditor() {
         final RegArrayButton button = new RegArrayButton(null);
         final MemoryButton mbutton = new MemoryButton(null);
-        final MRCellEditor regarrEditor = new MRCellEditor(button, mbutton);
+        final StorageButton storButton = new StorageButton(null);
+        final MRCellEditor regarrEditor = new MRCellEditor(button, mbutton,storButton);
         table.getColumnModel().getColumn(1).setCellEditor(regarrEditor);
         MemoryButtonListener mBL = new MemoryButtonListener();
         button.addActionListener(mBL);
         mbutton.addActionListener(mBL);
+        storButton.addActionListener(mBL);
     }
 
     class MemoryButtonListener implements ActionListener {
@@ -118,6 +122,8 @@ public final class SimStateTopComponent extends TopComponent {
             TopComponent tC;
             if (aE.getSource() instanceof MemoryButton) {
                 tC = WindowHelper.findTopComponent(((MemoryButton) (aE.getSource())).memory);
+            } else if(aE.getSource() instanceof StorageButton ) {
+                tC = WindowHelper.findTopComponent(((StorageButton) (aE.getSource())).storage);
             } else {
                 tC = WindowHelper.findTopComponent(((RegArrayButton) (aE.getSource())).regarray);
             }
@@ -125,10 +131,13 @@ public final class SimStateTopComponent extends TopComponent {
             if (tC == null) {
                 if (aE.getSource() instanceof MemoryButton) {
                     tC = new MemoryViewerTopComponent();
-                    ((MemoryViewerTopComponent)tC).initMemoryViewer(((MemoryButton) (aE.getSource())).memory);
-                } else {
+                    ((MemoryViewerTopComponent) tC).initMemoryViewer(((MemoryButton) (aE.getSource())).memory);
+                } else if (aE.getSource() instanceof StorageButton) {
+                    tC = new StorageViewerTopComponent();
+                    ((StorageViewerTopComponent) tC).initStorViewer(((StorageButton) (aE.getSource())).storage);
+                }else {
                     tC = new RegArrayViewerTopComponent();
-                    ((RegArrayViewerTopComponent)tC).initRegArrayViewer(((RegArrayButton) (aE.getSource())).regarray);
+                    ((RegArrayViewerTopComponent) tC).initRegArrayViewer(((RegArrayButton) (aE.getSource())).regarray);
                 }
                 Mode m = WindowManager.getDefault().findMode("memviewer");
                 m.dockInto(tC);
@@ -155,12 +164,13 @@ public final class SimStateTopComponent extends TopComponent {
      * @param memoryOrder
      * @param regArrOrder
      */
-    public void setData(LinkedList registerOrder, LinkedList busOrder, LinkedList memoryOrder, LinkedList regArrOrder) {
-        model = new SimStateTableModel(registerOrder, busOrder, memoryOrder, regArrOrder, this);
+    public void setData(LinkedList registerOrder, LinkedList busOrder, LinkedList memoryOrder,LinkedList storageOrder, LinkedList regArrOrder) {
+        model = new SimStateTableModel(registerOrder, busOrder, memoryOrder, storageOrder, regArrOrder, this);
         table.setModel(model);
         //table.setPreferredScrollableViewportSize(table.getPreferredSize());
         model.fireTableDataChanged();
         addMemories2MemoryList(memoryOrder);
+        addStorages2StorArrayList(storageOrder);
         addRegArrays2RegArrayList(regArrOrder);
     }
 
@@ -194,6 +204,13 @@ public final class SimStateTopComponent extends TopComponent {
         }
     }
 
+    private void addStorages2StorArrayList(LinkedList<Storage> storageOrder) {
+        storages = new LinkedList();
+        for (Storage stor : storageOrder) {
+            storages.add(stor);
+        }
+    }
+
     public void simUpdate() {
         model.fireTableDataChanged();
         TopComponent tC;
@@ -207,6 +224,12 @@ public final class SimStateTopComponent extends TopComponent {
             tC = WindowHelper.findTopComponent(rA);
             if (tC != null) {
                 ((RegArrayViewerTopComponent) (tC)).simUpdate();
+            }
+        }
+        for (Storage s : storages) {
+            tC = WindowHelper.findTopComponent(s);
+            if (tC != null) {
+                ((StorageViewerTopComponent) tC).simUpdate();
             }
         }
     }
@@ -333,7 +356,7 @@ public final class SimStateTopComponent extends TopComponent {
                 Object value, boolean isSelected, boolean hasFocus, int row, int col) {
             setBackground(oldBackground);
 
-            if (value instanceof Memory || value instanceof RegisterArray) {
+            if (value instanceof Memory || value instanceof RegisterArray || value instanceof Storage) {
                 return button;
             } else if (((SimStateTableModel) table.getModel()).registerValueChangedAt(row, col)) {
                 // catch if register has changed value
@@ -367,15 +390,27 @@ public final class SimStateTopComponent extends TopComponent {
         }
     }
 
+    class StorageButton extends JButton {
+
+        public Storage storage;
+
+        StorageButton(Storage storage) {
+            super(NbBundle.getMessage(SimStateTopComponent.class, "BUTTON_CONTENT"));
+            this.storage = storage;
+        }
+    }
+
     class MRCellEditor extends DefaultCellEditor {
 
         RegArrayButton rbutton;
         MemoryButton mbutton;
+        StorageButton storButton;
 
-        MRCellEditor(RegArrayButton b, MemoryButton m) {
+        MRCellEditor(RegArrayButton b, MemoryButton m, StorageButton s) {
             super(new JTextField());
             rbutton = b;
             mbutton = m;
+            storButton = s;
             setClickCountToStart(1);
             rbutton.addActionListener(new ActionListener() {
                 @Override
@@ -405,8 +440,10 @@ public final class SimStateTopComponent extends TopComponent {
                 return rbutton;
             } else if (value instanceof Memory) {
                 mbutton.memory = (Memory) value;
-
                 return mbutton;
+            } else if (value instanceof Storage) {
+                storButton.storage = (Storage) value;
+                return storButton;
             } else {
                 return super.getTableCellEditorComponent(table, value, isSelected, row, col);
             }
