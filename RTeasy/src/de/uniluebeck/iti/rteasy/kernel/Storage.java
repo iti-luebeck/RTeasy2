@@ -85,6 +85,7 @@ public class Storage extends SimulationObject {
 
     public void commit() {
         stor.putAll(storNew);
+        storNew.clear();
     }
 
     public void clear() {
