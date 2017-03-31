@@ -63,7 +63,7 @@ public class Storage extends SimulationObject {
         storNew = new HashMap();
         this.direction = direction;
         this.offset = offset;
-        this.addrMaxWidth = (int)(Math.log10(length)/Math.log10(2.));
+        this.addrMaxWidth = (int)(Math.ceil(Math.log10(((double)length))/Math.log10(2.)));
     }
 
     public void set(int address, BitVector bv) {
