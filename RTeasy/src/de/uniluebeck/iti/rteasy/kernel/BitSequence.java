@@ -202,7 +202,7 @@ public class BitSequence {
                 Storage stor = (Storage) ref;
                 registerNumberOrStorageAddress = getValueFromAddressBrackets();
                 if (!stor.checkIfWrittenThisCicle(registerNumberOrStorageAddress))/*TEST IF this stor cell has been written already*/ {
-                    if (stor.getLength() >= registerNumberOrStorageAddress) {
+                    if (stor.getLength() > registerNumberOrStorageAddress) {
                         if (stor.getWidth() == bitNumbers.size())/*TEST IF this stor cell is as big as the bitvector */ {
                             stor.set(registerNumberOrStorageAddress, bv);
                         } else {
