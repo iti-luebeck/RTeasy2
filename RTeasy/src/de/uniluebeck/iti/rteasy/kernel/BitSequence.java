@@ -167,16 +167,21 @@ public class BitSequence {
             } else if (ref instanceof RegisterArray) {
                 RegisterArray ra = (RegisterArray) ref;
                 registerNumberOrStorageAddress = getValueFromAddressBrackets();
-                ra.setRegisterNumber(registerNumberOrStorageAddress);
-                nval = nval + (ra.get(edgeType, idx) ? "1" : "0");
+                if (ra.getLength() <= registerNumberOrStorageAddress) {
+                    pc.raiseRuntimeError("You are trying to read from a cell that is out of bounds of the Registerarray " + ra.getIdStr() + ". Maximum value is " + (ra.getLength()-1) + ".", pr);
+                } else {
+                    ra.setRegisterNumber(registerNumberOrStorageAddress);
+                    nval = nval + (ra.get(edgeType, idx) ? "1" : "0");
+                }
+
             } else if (ref instanceof Storage) {
                 Storage stor = (Storage) ref;
-                if(stor.getLength()<getValueFromAddressBrackets()) {
-                    pc.raiseRuntimeError("You are trying to read from a cell that is out of the bounds of Storage "+ stor.getIdStr() +". Maximum value is "+stor.getLength()+".", pr);
-                }else {
+                if (stor.getLength() <= getValueFromAddressBrackets()) {
+                    pc.raiseRuntimeError("You are trying to read from a cell that is out of the bounds of Storage " + stor.getIdStr() + ". Maximum value is " + (stor.getLength()-1) + ".", pr);
+                } else {
                     return stor.get(getValueFromAddressBrackets());
                 }
-                
+
             } else {
                 nval = nval + "X";
             }
@@ -203,9 +208,8 @@ public class BitSequence {
                         } else {
                             pc.raiseRuntimeError("The width of the data you want to write is not equal to the width of the storage-memorie " + stor.getIdStr(), pr);
                         }
-                    }
-                    else {
-                        pc.raiseRuntimeError("Your address value is too big for storage: "+stor.getIdStr()+". Maximum value is "+stor.getLength()+".",pr);
+                    } else {
+                        pc.raiseRuntimeError("Your address value is too big for storage: " + stor.getIdStr() + ". Maximum value is " + (stor.getLength()-1) + ".", pr);
                     }
 
                 }
@@ -225,10 +229,14 @@ public class BitSequence {
             } else if (ref instanceof RegisterArray) {
                 RegisterArray ra = (RegisterArray) ref;
                 registerNumberOrStorageAddress = getValueFromAddressBrackets();
-                ra.setRegisterNumber(registerNumberOrStorageAddress);
-                if (!ra.set(idx, bv.get(i))) {
-                    pc.raiseRuntimeError("Bit Nr. " + idx + " von Registerarray " + ra.getIdStr() + " wurde mehr als einmal im gleichen Takt beschrieben!", pr);
-                    return false;
+                if (ra.getLength() <= registerNumberOrStorageAddress) {
+                    pc.raiseRuntimeError("You are trying to write to a cell that is out of bounds of the Registerarray " + ra.getIdStr() + ". Maximum value is " + (ra.getLength()-1) + ".", pr);
+                } else {
+                    ra.setRegisterNumber(registerNumberOrStorageAddress);
+                    if (!ra.set(idx, bv.get(i))) {
+                        pc.raiseRuntimeError("Bit Nr. " + idx + " von Registerarray " + ra.getIdStr() + " wurde mehr als einmal im gleichen Takt beschrieben!", pr);
+                        return false;
+                    }
                 }
             }
         }
