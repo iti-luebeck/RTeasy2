@@ -194,6 +194,7 @@ public class BitSequence {
         ListIterator numIt = bitNumbers.listIterator(0);
         int idx;
         int i = width;
+        boolean checked = false;
         while (refIt.hasNext() && numIt.hasNext()) {
             i--;
             idx = ((Integer) numIt.next()).intValue();
@@ -201,7 +202,8 @@ public class BitSequence {
             if (ref instanceof Storage) {
                 Storage stor = (Storage) ref;
                 registerNumberOrStorageAddress = getValueFromAddressBrackets();
-                if (!stor.checkIfWrittenThisCicle(registerNumberOrStorageAddress))/*TEST IF this stor cell has been written already*/ {
+                if (!stor.checkIfWrittenThisCicle(registerNumberOrStorageAddress)|| checked)/*TEST IF this stor cell has been written already*/ {
+                    checked = true;
                     if (stor.getLength() > registerNumberOrStorageAddress) {
                         if (stor.getWidth() == bitNumbers.size())/*TEST IF this stor cell is as big as the bitvector */ {
                             stor.set(registerNumberOrStorageAddress, bv);
